@@ -12,9 +12,9 @@ import java.util.List;
 public interface LicenseService {
 
 
-    public LicenseDto generare(String jsonString);
+    LicenseDto generare(String jsonString);
 
-    public void saveLicense(LicenseDto licenseDto);
+    void saveLicense(LicenseDto licenseDto);
 
     List<LicenseDto> readAllLicenseDTO();
 
