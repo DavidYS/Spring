@@ -13,7 +13,7 @@ import java.util.List;
 public interface LicenseController {
 
     @GetMapping("/readAll")
-    List<LicenseEntity> readAllLicenses();
+    List<LicenseDto> readAllLicenses();
 
     @GetMapping("/test")
     String test();
