@@ -3,25 +3,23 @@ package com.fortech;
 import com.fortech.dto.LicenseDto;
 import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
-import controller.LicenseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@CrossOrigin
+
 @RestController
 public class LicenseControllerImpl implements LicenseController {
 
 @Autowired
-    private LicenseRepository licenseRepository;
-    public String test() {
-        return "Hello world!";
-    }
+private LicenseRepository licenseRepository;
+
+    @Autowired
+    LicenseService licenseService;
+
     @Override
     public List<LicenseDto> readAllLicenses() {
         List<LicenseEntity> list = licenseRepository.findAll();
@@ -31,10 +29,11 @@ public class LicenseControllerImpl implements LicenseController {
             listDto.add(l.toDto());
         });
         return listDto;
- }
+
+    }
 
     @Override
-    public LicenseDto readOneLicense() {
+    public LicenseDto readOneLicense1() {
         LicenseDto dto = new LicenseDto();
         dto.setGeneratedKey("string11");
         dto.setValidationKey("string2");
@@ -42,7 +41,15 @@ public class LicenseControllerImpl implements LicenseController {
     }
 
     @Override
-    public ResponseEntity<Object> add(LicenseDto input) {
-        return null;
+    public String generateLicense(String jsonString) {
+        LicenseDto licenseDto = new LicenseDto();
+        licenseDto = licenseService.generare(jsonString);
+
+        licenseService.saveLicense(licenseDto);
+
+        return licenseDto.getValidationKey();
+
     }
+
+
 }

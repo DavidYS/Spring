@@ -1,8 +1,12 @@
 package com.fortech.entity;
 
+import com.google.gson.Gson;
+
+import javax.persistence.Entity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 
 public class License2 {
 
@@ -70,24 +74,29 @@ public class License2 {
         this.client = client;
     }
 
-    public License2 generate(License1 license1){
+    public void generate(License1 license1){
         SimpleDateFormat sdf  = new SimpleDateFormat("dd-MM-yyyy");
         Calendar cal = Calendar.getInstance();
         Date date_start = cal.getTime();
         cal.add(Calendar.YEAR, 1); // to get previous year add -1
         Date date_finish = cal.getTime();
 
-        License2 generate = new License2();
-        generate.setHostName(license1.getHostName());
-        generate.setIpAddress(license1.getIpAddress());
-        generate.setIpMac(license1.getIpMac());
-        generate.setTimestamp(license1.getTimestamp());
-        generate.setStart_date(sdf.format(date_start));
-        generate.setFinish_date(sdf.format(date_finish));
+        this.setHostName(license1.getHostName());
+        this.setIpAddress(license1.getIpAddress());
+        this.setIpMac(license1.getIpMac());
+        this.setTimestamp(license1.getTimestamp());
+        this.setStart_date(sdf.format(date_start));
+        this.setFinish_date(sdf.format(date_finish));
         //Client
-        generate.setClient("Client");
+        this.setClient("Client");
+    }
 
-        return generate;
+
+    public String toString(){
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+        return json;
+
     }
 }
 
