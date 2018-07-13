@@ -10,10 +10,6 @@ public class LicenseDto {
 
     }
 
-    public LicenseDto(String validationKey, String generatedKey) {
-        this.validationKey = validationKey;
-        this.generatedKey = generatedKey;
-    }
 
     public LicenseEntity toEntity(){
         LicenseEntity entity=new LicenseEntity();
@@ -32,4 +28,11 @@ public class LicenseDto {
         this.generatedKey = generatedKey;
     }
 
+    public String getValidationKey() {
+        return validationKey;
+    }
+
+    public String getGeneratedKey() {
+        return generatedKey;
+    }
 }

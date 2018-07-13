@@ -23,14 +23,22 @@ public class LicenseControllerImpl implements LicenseController {
         return "Hello world!";
     }
     @Override
-    public List<LicenseEntity> readAllLicenses() {
+    public List<LicenseDto> readAllLicenses() {
+        List<LicenseEntity> list = licenseRepository.findAll();
+        List<LicenseDto> listDto = new ArrayList<>();
 
-        return licenseRepository.findAll();
-    }
+        list.forEach(l -> {
+            listDto.add(l.toDto());
+        });
+        return listDto;
+ }
 
     @Override
     public LicenseDto readOneLicense() {
-        return new LicenseDto("string11","string2");
+        LicenseDto dto = new LicenseDto();
+        dto.setGeneratedKey("string11");
+        dto.setValidationKey("string2");
+        return dto;
     }
 
     @Override
