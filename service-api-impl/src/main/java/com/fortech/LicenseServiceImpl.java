@@ -9,11 +9,31 @@ import io.swagger.annotations.License;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class LicenseServiceImpl implements LicenseService{
 
     @Autowired
-    private LicenseRepository licenseRepository;
+    LicenseRepository licenseRepository;
+
+    /*LicenseServiceImpl(LicenseRepository licenseRepository){
+        this.licenseRepository = licenseRepository;
+    }*/
+
+    public List<LicenseDto> readAllLicenseDTO(){
+        List<LicenseEntity> list = licenseRepository.findAll();
+
+        List<LicenseDto> listDto = new ArrayList<>();
+
+        list.forEach(l -> {
+            listDto.add(l.toDto());
+            System.out.println(l.getGeneratedKey());
+        });
+
+        return listDto;
+    }
 
 
     @Override

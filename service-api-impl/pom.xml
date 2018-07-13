@@ -22,6 +22,10 @@
             <artifactId>swagger-annotations</artifactId>
             <version>1.5.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.fortech</groupId>
+            <artifactId>model</artifactId>
+        </dependency>
 
 
 

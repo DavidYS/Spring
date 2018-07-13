@@ -6,6 +6,8 @@ import com.fortech.entity.License2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface LicenseService {
 
@@ -13,6 +15,8 @@ public interface LicenseService {
     public LicenseDto generare(String jsonString);
 
     public void saveLicense(LicenseDto licenseDto);
+
+    List<LicenseDto> readAllLicenseDTO();
 
 
 

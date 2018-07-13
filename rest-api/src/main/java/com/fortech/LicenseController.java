@@ -24,7 +24,7 @@ public interface LicenseController {
     @GetMapping("/licenseId")
     public LicenseDto readOneLicense1();
 
-    @RequestMapping(value = "/sendjson1/{jsonString}", method = RequestMethod.GET)
+    @GetMapping("/sendjson1/{jsonString}")
     String generateLicense(@PathVariable String jsonString);
 
 }

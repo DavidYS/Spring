@@ -10,25 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+@CrossOrigin
 @RestController
 public class LicenseControllerImpl implements LicenseController {
 
-@Autowired
-private LicenseRepository licenseRepository;
+/*@Autowired
+private LicenseRepository licenseRepository;*/
 
     @Autowired
     LicenseService licenseService;
 
     @Override
     public List<LicenseDto> readAllLicenses() {
-        List<LicenseEntity> list = licenseRepository.findAll();
-        List<LicenseDto> listDto = new ArrayList<>();
 
-        list.forEach(l -> {
-            listDto.add(l.toDto());
-        });
-        return listDto;
+        return licenseService.readAllLicenseDTO();
 
     }
 
@@ -41,11 +36,13 @@ private LicenseRepository licenseRepository;
     }
 
     @Override
-    public String generateLicense(String jsonString) {
+    public String generateLicense(@PathVariable String jsonString) {
         LicenseDto licenseDto = new LicenseDto();
         licenseDto = licenseService.generare(jsonString);
 
         licenseService.saveLicense(licenseDto);
+
+        System.out.println(licenseDto.getValidationKey());
 
         return licenseDto.getValidationKey();
 
