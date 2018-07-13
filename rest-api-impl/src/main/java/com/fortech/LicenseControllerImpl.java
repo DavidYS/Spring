@@ -3,11 +3,8 @@ package com.fortech;
 import com.fortech.dto.LicenseDto;
 import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
-import controller.LicenseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,24 +14,21 @@ import java.util.List;
 @RestController
 public class LicenseControllerImpl implements LicenseController {
 
-@Autowired
-    private LicenseRepository licenseRepository;
-    public String test() {
-        return "Hello world!";
-    }
+/*@Autowired
+private LicenseRepository licenseRepository;*/
+
+    @Autowired
+    LicenseService licenseService;
+
     @Override
     public List<LicenseDto> readAllLicenses() {
-        List<LicenseEntity> list = licenseRepository.findAll();
-        List<LicenseDto> listDto = new ArrayList<>();
 
-        list.forEach(l -> {
-            listDto.add(l.toDto());
-        });
-        return listDto;
- }
+        return licenseService.readAllLicenseDTO();
+
+    }
 
     @Override
-    public LicenseDto readOneLicense() {
+    public LicenseDto readOneLicense1() {
         LicenseDto dto = new LicenseDto();
         dto.setGeneratedKey("string11");
         dto.setValidationKey("string2");
@@ -42,7 +36,17 @@ public class LicenseControllerImpl implements LicenseController {
     }
 
     @Override
-    public ResponseEntity<Object> add(LicenseDto input) {
-        return null;
+    public String generateLicense(@PathVariable String jsonString) {
+        LicenseDto licenseDto = new LicenseDto();
+        licenseDto = licenseService.generare(jsonString);
+
+        licenseService.saveLicense(licenseDto);
+
+        System.out.println(licenseDto.getValidationKey());
+
+        return licenseDto.getValidationKey();
+
     }
+
+
 }

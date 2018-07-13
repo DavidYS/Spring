@@ -3,6 +3,9 @@ package com.fortech.entity;
 
 import com.google.gson.Gson;
 
+import javax.persistence.Entity;
+
+
 public class License1 {
 
     private String hostName;
@@ -48,6 +51,13 @@ public class License1 {
         License1 license1 = new License1();
         license1 = gson.fromJson(json1, License1.class);
         return license1;
+    }
+
+    public String toString(){
+        Gson gson = new Gson();
+        String json = gson.toJson(this);
+        return json;
+
     }
 }
 

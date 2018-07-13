@@ -33,6 +33,7 @@
             <groupId>com.fortech</groupId>
             <artifactId>model</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>
