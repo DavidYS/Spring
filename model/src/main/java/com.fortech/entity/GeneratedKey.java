@@ -3,10 +3,8 @@ package com.fortech.entity;
 
 import com.google.gson.Gson;
 
-import javax.persistence.Entity;
 
-
-public class License1 {
+public class GeneratedKey {
 
     private String hostName;
     private String ipAddress;
@@ -46,14 +44,14 @@ public class License1 {
     }
 
 
-    public License1 fromString(String json1) {
+    public GeneratedKey fromString(String json1) {
         Gson gson = new Gson();
-        License1 license1 = new License1();
-        license1 = gson.fromJson(json1, License1.class);
-        return license1;
+        GeneratedKey generatedKey = new GeneratedKey();
+        generatedKey = gson.fromJson(json1, GeneratedKey.class);
+        return generatedKey;
     }
 
-    public String toString(){
+    public String toString() {
         Gson gson = new Gson();
         String json = gson.toJson(this);
         return json;
