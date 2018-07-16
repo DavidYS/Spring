@@ -14,5 +14,14 @@
         <module name="service-api-impl" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="boot" target="1.8" />
+      <module name="model" target="1.8" />
+      <module name="rest-api" target="1.8" />
+      <module name="rest-api-impl" target="1.8" />
+      <module name="service-api" target="1.8" />
+      <module name="service-api-impl" target="1.8" />
+      <module name="Spring2" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

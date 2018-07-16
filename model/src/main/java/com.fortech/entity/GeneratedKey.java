@@ -48,6 +48,10 @@ public class GeneratedKey {
         Gson gson = new Gson();
         GeneratedKey generatedKey = new GeneratedKey();
         generatedKey = gson.fromJson(json1, GeneratedKey.class);
+        this.setHostName(generatedKey.getHostName());
+        this.setIpAddress(generatedKey.getIpAddress());
+        this.setIpMac(generatedKey.getIpMac());
+        this.setTimestamp(generatedKey.getTimestamp());
         return generatedKey;
     }
 

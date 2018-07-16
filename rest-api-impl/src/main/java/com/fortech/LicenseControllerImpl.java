@@ -27,6 +27,23 @@ private LicenseRepository licenseRepository;*/
 
     }
 
+    @DeleteMapping("/delete/{generatedkey}")
+    public void deleteByGeneratedKey(@PathVariable("generatedkey") String generatedkey){
+
+        System.out.println(generatedkey);
+        licenseService.deleteLicenseDTO(generatedkey);
+
+        //return new LicenseEntity();
+    }
+
+    @GetMapping("/findone/{generatedkey}")
+    public LicenseDto readOne(@PathVariable("generatedkey") String generatedKey){
+
+        System.out.println(generatedKey);
+        return licenseService.findLicenseDto(generatedKey);
+
+    }
+
     @Override
     public LicenseDto readOneLicense1() {
         LicenseDto dto = new LicenseDto();
