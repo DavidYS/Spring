@@ -1,11 +1,6 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
-import com.fortech.entity.License1;
-import com.fortech.entity.License2;
-import com.fortech.entity.LicenseEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
