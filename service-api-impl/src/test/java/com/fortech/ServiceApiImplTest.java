@@ -35,7 +35,7 @@ public class ServiceApiImplTest {
     @Test
     public void testAddLicense1(){
 
-        License1 aMockContact = new License1();
+        GeneratedKey aMockContact = new License1();
         aMockContact.setHostName("assdgs");
 
         when(LicenseRepository.save(any(License1.class))).thenReturn(aMockContact);
