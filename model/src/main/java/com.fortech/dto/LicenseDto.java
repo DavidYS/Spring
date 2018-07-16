@@ -11,13 +11,12 @@ public class LicenseDto {
     }
 
 
-    public LicenseEntity toEntity(){
-        LicenseEntity entity=new LicenseEntity();
+    public LicenseEntity toEntity() {
+        LicenseEntity entity = new LicenseEntity();
         entity.setValidationKey(this.validationKey);
         entity.setGeneratedKey(this.generatedKey);
         return entity;
     }
-
 
 
     public void setValidationKey(String validationKey) {
