@@ -50,6 +50,10 @@ public class License1 {
         Gson gson = new Gson();
         License1 license1 = new License1();
         license1 = gson.fromJson(json1, License1.class);
+        this.setHostName(license1.getHostName());
+        this.setIpAddress(license1.getIpAddress());
+        this.setIpMac(license1.getIpMac());
+        this.setTimestamp(license1.getTimestamp());
         return license1;
     }
 

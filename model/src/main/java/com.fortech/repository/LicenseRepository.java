@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface LicenseRepository extends JpaRepository<LicenseEntity, Long> {
 
+    LicenseEntity findByGeneratedKey(String generatedKey);
 }

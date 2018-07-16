@@ -3,6 +3,7 @@ package com.fortech;
 import com.fortech.dto.LicenseDto;
 import com.fortech.entity.License1;
 import com.fortech.entity.License2;
+import com.fortech.entity.LicenseEntity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,10 @@ public interface LicenseService {
     void saveLicense(LicenseDto licenseDto);
 
     List<LicenseDto> readAllLicenseDTO();
+
+    LicenseEntity deleteLicenseDTO(String json1);
+
+    LicenseDto findLicenseDto(String generatedKey);
 
 
 
