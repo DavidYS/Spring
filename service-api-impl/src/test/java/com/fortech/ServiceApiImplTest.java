@@ -1,6 +1,7 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
+import com.fortech.entity.GeneratedKey;
 import com.fortech.entity.License1;
 import com.fortech.repository.LicenseRepository;
 import org.junit.Before;
@@ -35,12 +36,12 @@ public class ServiceApiImplTest {
     @Test
     public void testAddLicense1(){
 
-        GeneratedKey aMockContact = new License1();
+        GeneratedKey aMockContact = new GeneratedKey();
         aMockContact.setHostName("assdgs");
 
-        when(LicenseRepository.save(any(License1.class))).thenReturn(aMockContact);
+        when(LicenseRepository.save(any(GeneratedKey.class))).thenReturn(aMockContact);
 
-        License1 newLicense = licenseServiceImpl.add(null);
+        GeneratedKey newLicense = licenseServiceImpl.add(null);
 
         assertEquals("assdgs", newLicense.getHostName());
     }
