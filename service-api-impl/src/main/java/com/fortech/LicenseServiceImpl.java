@@ -53,7 +53,7 @@ public class LicenseServiceImpl implements LicenseService{
     public void saveLicense(LicenseDto licenseDto) {
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity = licenseDto.toEntity();
-        licenseRepository.save(licenseEntity);git a
+        licenseRepository.save(licenseEntity);
     }
 
 

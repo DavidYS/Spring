@@ -1,8 +1,7 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
-import com.fortech.entity.GeneratedKey;
-import com.fortech.entity.License1;
+import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,36 +12,41 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static sun.misc.ClassFileTransformer.add;
+
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ServiceApiImplTest {
 
     @Mock
-    private LicenseRepository licenseRepository;
+    LicenseRepository licenseRepositoryMock;
 
     @InjectMocks
-    private LicenseServiceImpl licenseServiceImpl;
+    LicenseServiceImpl licenseServiceImpl;
 
     @Before
-    public void setup(){
+    public void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testAddLicense1(){
+    public void testAddGeneratedKey() {
 
-        GeneratedKey aMockContact = new GeneratedKey();
-        aMockContact.setHostName("assdgs");
+        LicenseEntity aMockContact = new LicenseEntity();
+        aMockContact.setGeneratedKey("sd");
+        aMockContact.setValidationKey("dsfg");
 
-        when(LicenseRepository.save(any(GeneratedKey.class))).thenReturn(aMockContact);
+        when(licenseRepositoryMock.save(any(LicenseEntity.class))).thenReturn((aMockContact));
 
-        GeneratedKey newLicense = licenseServiceImpl.add(null);
+        List<LicenseDto> newLicense = licenseServiceImpl.readAllLicenseDTO();
 
-        assertEquals("assdgs", newLicense.getHostName());
+        assertEquals("sd", aMockContact.getGeneratedKey());
+
+
     }
 }

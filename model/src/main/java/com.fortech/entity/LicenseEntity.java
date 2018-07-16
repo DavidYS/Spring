@@ -57,4 +57,5 @@ public class LicenseEntity {
      dto.setValidationKey(this.validationKey);
       return dto;
 }
+
 }
