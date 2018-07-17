@@ -29,10 +29,10 @@ private LicenseRepository licenseRepository;*/
     }
 
     @DeleteMapping("/delete/{generatedkey}")
-    public void deleteByGeneratedKey(@PathVariable("generatedkey") String generatedkey){
+    public String deleteByGeneratedKey(@PathVariable("generatedkey") String generatedkey){
 
         System.out.println(generatedkey);
-        licenseService.deleteLicenseDTO(generatedkey);
+        return licenseService.deleteLicenseDTO(generatedkey);
 
         //return new LicenseEntity();
     }

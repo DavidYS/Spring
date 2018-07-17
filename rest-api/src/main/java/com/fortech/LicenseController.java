@@ -16,7 +16,7 @@ public interface LicenseController {
 
 
     @DeleteMapping("/delete/{generatedkey}")
-    void deleteByGeneratedKey(@PathVariable("generatedkey") String generatedkey);
+    String deleteByGeneratedKey(@PathVariable("generatedkey") String generatedkey);
 
     @GetMapping("/findone/{generatedkey}")
     LicenseDto readOne(@PathVariable("generatedkey") String generatedKey);
