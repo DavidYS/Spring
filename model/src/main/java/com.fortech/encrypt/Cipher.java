@@ -1,4 +1,4 @@
-package com.fortech.encript;
+package com.fortech.encrypt;
 
 import org.apache.commons.codec.binary.Base64;
 
