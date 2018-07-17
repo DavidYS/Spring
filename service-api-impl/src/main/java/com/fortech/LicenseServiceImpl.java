@@ -34,7 +34,7 @@ public class LicenseServiceImpl implements LicenseService{
         return listDto;
     }
 
-    public LicenseEntity deleteLicenseDTO(String json1) {
+    public String deleteLicenseDTO(String json1) {
 
         List<LicenseEntity> entities = licenseRepository.findAll();
         int nr = 0;
@@ -45,7 +45,7 @@ public class LicenseServiceImpl implements LicenseService{
         }
         if(nr > 1){
             System.out.println("Sunt mai multe");
-            return null;
+            return "Au fost gasite mai multe licente";
         }
 
         LicenseEntity licenseEntity = licenseRepository.findByGeneratedKey(json1);
@@ -57,12 +57,12 @@ public class LicenseServiceImpl implements LicenseService{
             System.out.println(licenseEntity.getValidationKey());
             licenseRepository.delete(licenseEntity);
 
-            return licenseEntity;
+            return "Licenta "+ licenseEntity.toString() + " a fost stearsa" ;
         } else {
             System.out.println("License : " + json1 + " not found.");
         }
 
-        return null;
+        return "Nu a fost gasita licenta";
 
     }
 
