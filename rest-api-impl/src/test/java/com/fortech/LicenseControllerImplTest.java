@@ -37,7 +37,7 @@ public class  LicenseControllerImplTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
 
-        for(int i = 0; i <= 50; ++i) {
+        for(int i = 0; i < 10; ++i) {
             LicenseEntity license = new LicenseEntity();
             license.setId((long)i);
             license.setGeneratedKey("Generated " + i + " Key");
@@ -48,23 +48,36 @@ public class  LicenseControllerImplTest {
     }
 
     @After
-    public void delete() {
+    public void deleteDatabase() {
         this.licenseRepository.deleteAll();
     }
 
     @Test
-    public void readAll() throws Exception {
+    public void readAllLicenses() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/license/readAll"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].*", hasSize(2)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(50)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(10)));
     }
 
     @Test
-    public void deleteOne() throws Exception {
+    public void deleteOneByKey() throws Exception {
         this.mockMvc.perform((MockMvcRequestBuilders.delete(("/license/delete/Generated 50 Key"))))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    public void readOne() throws Exception{
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/Generated 50 Key"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+//    @Test
+//    public void generateLicense() throws Exception{
+//        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/sendjson1/{lj}"))
+//                .andExpect(MockMvcResultMatchers.status().isOk());
+//
+//    }
 
 }
