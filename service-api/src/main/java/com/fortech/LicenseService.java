@@ -19,10 +19,8 @@ public interface LicenseService {
 
     List<LicenseDto> readAllLicenseDTO();
 
-    LicenseEntity deleteLicenseDTO(String json1);
+    String deleteLicenseDTO(String json1);
 
     LicenseDto findLicenseDto(String generatedKey);
-
-
 
 }
