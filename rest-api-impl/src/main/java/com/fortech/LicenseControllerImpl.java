@@ -1,6 +1,7 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
+import com.fortech.encript.Cipher;
 import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,13 @@ private LicenseRepository licenseRepository;*/
     @Override
     public String generateLicense(@PathVariable String jsonString) {
         LicenseDto licenseDto = new LicenseDto();
-        licenseDto = licenseService.generare(jsonString);
+
+        Cipher cipher = new Cipher();
+        String jsonDecoded = cipher.decrypt(jsonString);
+        System.out.println(jsonDecoded);
+        System.out.println(jsonString);
+
+        licenseDto = licenseService.generare(jsonDecoded);
 
         licenseService.saveLicense(licenseDto);
 
