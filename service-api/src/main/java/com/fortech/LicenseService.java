@@ -23,6 +23,4 @@ public interface LicenseService {
 
     LicenseDto findLicenseDto(String generatedKey);
 
-
-
 }

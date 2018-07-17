@@ -17,10 +17,6 @@ public class LicenseServiceImpl implements LicenseService{
     @Autowired
     LicenseRepository licenseRepository;
 
-    /*LicenseServiceImpl(LicenseRepository licenseRepository){
-        this.licenseRepository = licenseRepository;
-    }*/
-
     public List<LicenseDto> readAllLicenseDTO(){
         List<LicenseEntity> list = licenseRepository.findAll();
 
@@ -113,7 +109,5 @@ public class LicenseServiceImpl implements LicenseService{
         licenseEntity = licenseDto.toEntity();
         licenseRepository.save(licenseEntity);
     }
-
-
 
 }

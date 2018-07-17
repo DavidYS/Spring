@@ -59,8 +59,6 @@ private LicenseRepository licenseRepository;*/
 
         Cipher cipher = new Cipher();
         String jsonDecoded = cipher.decrypt(jsonString);
-        System.out.println(jsonDecoded);
-        System.out.println(jsonString);
 
         licenseDto = licenseService.generare(jsonDecoded);
 
@@ -68,7 +66,7 @@ private LicenseRepository licenseRepository;*/
 
         System.out.println(licenseDto.getValidationKey());
 
-        return licenseDto.getValidationKey();
+        return cipher.encrypt(licenseDto.getValidationKey());
 
     }
 
