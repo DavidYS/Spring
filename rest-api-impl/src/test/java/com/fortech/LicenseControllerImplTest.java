@@ -37,10 +37,10 @@ public class  LicenseControllerImplTest {
     public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
 
-        for(int i = 0; i < 10; ++i) {
+        for(int i = 1; i <= 10; ++i) {
             LicenseEntity license = new LicenseEntity();
             license.setId((long)i);
-            license.setGeneratedKey("Generated " + i + " Key");
+            license.setGeneratedKey("CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4="+i);
             license.setValidationKey("Validation: " + i);
             this.licenseRepository.save(license);
         }
@@ -62,14 +62,23 @@ public class  LicenseControllerImplTest {
     }
 
     @Test
-    public void deleteOneByKey() throws Exception {
-        this.mockMvc.perform((MockMvcRequestBuilders.delete(("/license/delete/Generated 50 Key"))))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+    public void deleteOneByKeyIfCorrectKey() throws Exception {
+        this.mockMvc.perform((MockMvcRequestBuilders.delete(("/license/delete/CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=1"))))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("Licența a fost ștearsă."));
     }
 
     @Test
+    public void deleteOneByKeyIfNotFound() throws Exception {
+        this.mockMvc.perform((MockMvcRequestBuilders.delete(("/license/delete/CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4"))))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("Licența nu a fost găsită."));
+    }
+
+
+    @Test
     public void readOne() throws Exception{
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/Generated 50 Key"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

@@ -48,17 +48,14 @@ public class LicenseServiceImpl implements LicenseService{
         List<LicenseEntity> list = licenseRepository.findAll();
         System.out.println(json1);
         System.out.println(list.size());
-        System.out.println(1111111);
         if (licenseEntity != null) {
             System.out.println(licenseEntity.getValidationKey());
             licenseRepository.delete(licenseEntity);
 
-            return "Licența a fost ștearsă";
+            return "Licența a fost ștearsă.";
         } else {
-            System.out.println("License : " + json1 + " not found.");
+          return "Licența nu a fost găsită.";
         }
-
-        return "Licența a fost găsită";
 
     }
 
