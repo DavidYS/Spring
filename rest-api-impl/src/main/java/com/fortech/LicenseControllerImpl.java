@@ -1,13 +1,10 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
-import com.fortech.encript.Cipher;
-import com.fortech.entity.LicenseEntity;
-import com.fortech.repository.LicenseRepository;
+import com.fortech.encrypt.Cipher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
