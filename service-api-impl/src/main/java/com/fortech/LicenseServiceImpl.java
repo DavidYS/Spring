@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LicenseServiceImpl implements LicenseService{
@@ -18,16 +19,10 @@ public class LicenseServiceImpl implements LicenseService{
     LicenseRepository licenseRepository;
 
     public List<LicenseDto> readAllLicenseDTO(){
-        List<LicenseEntity> list = licenseRepository.findAll();
-
-        List<LicenseDto> listDto = new ArrayList<>();
-
-        list.forEach(l -> {
-            listDto.add(l.toDto());
-            System.out.println(l.getGeneratedKey());
-        });
-
-        return listDto;
+        return licenseRepository.findAll()
+                .stream()
+                .map(LicenseEntity::toDto)
+                .collect(Collectors.toList());
     }
 
     public String deleteLicenseDTO(String json1) {
