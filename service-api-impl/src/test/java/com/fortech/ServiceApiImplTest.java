@@ -1,7 +1,9 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
+import com.fortech.entity.GeneratedKey;
 import com.fortech.entity.LicenseEntity;
+import com.fortech.entity.ValidationKey;
 import com.fortech.repository.LicenseRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -93,4 +95,24 @@ public class ServiceApiImplTest {
 
     }
 
+
+    @Test
+    public void generare_shouldReturnALicenseDTO(){
+        String json1 =
+                "\""+"hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
+                "\""+"ipAddress"+"\""+":"+"\""+"192.168.216.152"+"\""+","+
+                "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
+                "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
+
+        LicenseDto result = licenseServiceImpl.generare(json1);
+
+        GeneratedKey generatedKey = new GeneratedKey();
+        ValidationKey validationKey = new ValidationKey();
+        validationKey.generate(generatedKey.fromString(json1));
+
+
+        assertEquals(validationKey.toString(),result.getValidationKey().toString());
+
+
+    }
 }

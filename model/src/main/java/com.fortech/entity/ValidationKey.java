@@ -2,11 +2,12 @@ package com.fortech.entity;
 
 import com.google.gson.Gson;
 
+import javax.persistence.Entity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
+@Entity
 public class ValidationKey {
 
     private String hostName;
@@ -73,7 +74,7 @@ public class ValidationKey {
         this.client = client;
     }
 
-    public void generate(GeneratedKey generatedKey) {
+    public void generate(GeneratedKey generatedKey){
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Calendar cal = Calendar.getInstance();
         Date date_start = cal.getTime();
