@@ -3,6 +3,7 @@ package com.fortech;
 import com.fortech.dto.LicenseDto;
 import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,14 +13,14 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import javax.validation.constraints.AssertTrue;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.ignoreStubs;
 import static org.mockito.Mockito.when;
 
 
@@ -41,20 +42,60 @@ public class ServiceApiImplTest {
     @Test
     public void readAllLicenseDTO_shouldReturnANonEmptyList() {
 
-        LicenseEntity licenseEntity = new LicenseEntity();
-        String generatedKey = "sd";
-        String validationKey = "dsfg";
-        licenseEntity.setGeneratedKey(generatedKey);
-        licenseEntity.setValidationKey(validationKey);
-        List<LicenseEntity> licenseEntities = Collections.singletonList(licenseEntity);
+        LicenseEntity licenseEntity1 = new LicenseEntity();
+        String generatedKey1 = "abc";
+        String validationKey1 = "def";
+        licenseEntity1.setGeneratedKey(generatedKey1);
+        licenseEntity1.setValidationKey(validationKey1);
+
+        LicenseEntity licenseEntity2 = new LicenseEntity();
+        String generatedKey2 = "ghj";
+        String validationKey2 = "tyu";
+        licenseEntity2.setGeneratedKey(generatedKey2);
+        licenseEntity2.setValidationKey(validationKey2);
+
+        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2 );
         when(licenseRepositoryMock.findAll()).thenReturn(licenseEntities);
 
         List<LicenseDto> result = licenseServiceImpl.readAllLicenseDTO();
 
-        assertEquals(1, result.size());
-        LicenseDto resultLicense = result.get(0);
-        assertEquals(generatedKey, resultLicense.getGeneratedKey());
-        assertEquals(validationKey, resultLicense.getValidationKey());
+        assertEquals(2, result.size());
+
+        LicenseDto resultLicense1 = result.get(0);
+        LicenseDto resultLicense2 = result.get(1);
+
+        assertEquals(generatedKey1, resultLicense1.getGeneratedKey());
+        assertEquals(validationKey1, resultLicense1.getValidationKey());
+
+        assertEquals(generatedKey2, resultLicense2.getGeneratedKey());
+        assertEquals(validationKey2, resultLicense2.getValidationKey());
+    }
+
+    @Test
+    public void readAllLicenseDTO_shouldReturnAnEmptyList() {
+
+        List<LicenseDto> result = licenseServiceImpl.readAllLicenseDTO();
+
+        assertTrue(result.isEmpty());
+
+    }
+
+    @Test
+    public void findLicenseDto_ifFoundOne()
+    {
+        
+    }
+
+    @Test
+    public void findLicenseDto_ifFoundMore()
+    {
+
+    }
+
+    @Test
+    public void findLicenseDto_ifNotFound()
+    {
+
     }
 
 }
