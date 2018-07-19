@@ -24,7 +24,7 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ServiceApiImplTest {
 
     @InjectMocks
