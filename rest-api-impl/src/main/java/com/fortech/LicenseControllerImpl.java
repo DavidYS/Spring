@@ -31,8 +31,11 @@ private LicenseRepository licenseRepository;*/
         Cipher cipher = new Cipher();
         String jsonDecoded = cipher.decrypt(generatedkey);
 
-        System.out.println(jsonDecoded);
-        return licenseService.deleteLicenseDTO(jsonDecoded);
+        Gson gson = new Gson();
+        GeneratedKey generate = gson.fromJson(jsonDecoded, GeneratedKey.class);
+
+        System.out.println(generate);
+        return licenseService.deleteLicenseDTO(generate);
 
         //return new LicenseEntity();
     }
@@ -43,8 +46,12 @@ private LicenseRepository licenseRepository;*/
         Cipher cipher = new Cipher();
         String jsonDecoded = cipher.decrypt(generatedKey);
 
-        System.out.println(jsonDecoded);
-        return licenseService.findLicenseDto(jsonDecoded);
+        GeneratedKey generatedKey1 = new GeneratedKey();
+        generatedKey1.fromString(jsonDecoded);
+        String json1 = generatedKey1.toString();
+
+        System.out.println(json1);
+        return licenseService.findLicenseDto(json1);
 
     }
 
