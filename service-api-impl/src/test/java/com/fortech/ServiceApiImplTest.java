@@ -5,24 +5,22 @@ import com.fortech.entity.GeneratedKey;
 import com.fortech.entity.LicenseEntity;
 import com.fortech.entity.ValidationKey;
 import com.fortech.repository.LicenseRepository;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.constraints.AssertTrue;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.ignoreStubs;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.when;
 
 
@@ -128,6 +126,20 @@ public class ServiceApiImplTest {
 
         assertEquals("{}",result.getGeneratedKey());
         assertEquals("{}",result.getValidationKey());
+    }
+
+    @Test
+    public void saveLicense_shouldVerifyIfSaveLicenseMethodIsCalled() {
+
+        LicenseDto licenseDto=new LicenseDto();
+        String generatedKeyTest = "generatedKeyTest";
+        licenseDto.setGeneratedKey(generatedKeyTest);
+        String validationKeyDto = "validationKeyDto";
+        licenseDto.setValidationKey(validationKeyDto);
+
+        licenseServiceImpl.saveLicense(licenseDto);
+
+        Mockito.verify(licenseRepositoryMock, timeout(1)).save(argThat(license -> license.getValidationKey().equals(validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
     }
 
 }
