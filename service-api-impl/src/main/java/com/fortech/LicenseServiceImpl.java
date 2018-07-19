@@ -96,7 +96,7 @@ public class LicenseServiceImpl implements LicenseService{
     }
 
     @Override
-    public String saveLicense(LicenseDto licenseDto) {
+    public void saveLicense(LicenseDto licenseDto) {
         /*LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity = licenseDto.toEntity();
         licenseRepository.save(licenseEntity);*/
@@ -105,8 +105,9 @@ public class LicenseServiceImpl implements LicenseService{
         licenseEntity = licenseDto.toEntity();
 
         //Verify if LicenseEntity exist more times
-        List<LicenseEntity> entities = licenseRepository.findAll();
 
+        List<LicenseEntity> entities = licenseRepository.findAll();
+        
         int nr = 0;
         for(LicenseEntity e : entities){
             if(e.getGeneratedKey().equals(licenseEntity.getGeneratedKey())){
@@ -115,11 +116,9 @@ public class LicenseServiceImpl implements LicenseService{
         }
         if(nr >= 1){
             System.out.println("Sunt mai multe");
-            return "Au fost găsite mai multe licențe";
         }
 
         licenseRepository.save(licenseEntity);
-        return "A fost salvat cu succes";
     }
 
 }
