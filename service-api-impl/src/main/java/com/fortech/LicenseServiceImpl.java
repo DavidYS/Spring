@@ -8,7 +8,7 @@ import com.fortech.repository.LicenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,14 +91,11 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public void saveLicense(LicenseDto licenseDto) {
-        /*LicenseEntity licenseEntity = new LicenseEntity();
-        licenseEntity = licenseDto.toEntity();
-        licenseRepository.save(licenseEntity);*/
         
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity = licenseDto.toEntity();
 
-        //Verify if LicenseEntity exist more times
+
 
         List<LicenseEntity> entities = licenseRepository.findAll();
         
@@ -111,8 +108,7 @@ public class LicenseServiceImpl implements LicenseService{
         if(nr >= 1){
             System.out.println("Sunt mai multe");
         }
-
-        licenseRepository.save(licenseEntity);
+        
         if(nr == 0){
             licenseRepository.save(licenseEntity);
         }
