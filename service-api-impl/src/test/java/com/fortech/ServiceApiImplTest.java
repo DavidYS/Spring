@@ -81,16 +81,11 @@ public class ServiceApiImplTest {
     }
 
     @Test
-    public void findLicenseDto_ifFoundOne()
-    {
-        
-    }
-
-    @Test
-    public void findLicenseDto_ifFoundMore()
+    public void findLicenseDto_ifFound()
     {
 
     }
+    
 
     @Test
     public void findLicenseDto_ifNotFound()
