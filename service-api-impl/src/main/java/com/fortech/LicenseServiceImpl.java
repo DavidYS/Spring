@@ -30,16 +30,19 @@ public class LicenseServiceImpl implements LicenseService{
         List<LicenseEntity> entities = licenseRepository.findAll();
 
         int ok=0;
+        //System.out.println("de testat  " + json);
 
         for(LicenseEntity e : entities){
-            System.out.println();
-            System.out.println(e.getGeneratedKey());
+            //System.out.println();
+            //System.out.println(e.getGeneratedKey());
             if(e.getGeneratedKey().equals(json)){
                 licenseRepository.delete(e);
                 ok=1;
             }
         }
 
+        //int nr = licenseRepository.findAll().size();
+        //System.out.println(licenseRepository.findAll().size());
         if(ok==1){
             return "Licența a fost ștearsă.";
         } else {
