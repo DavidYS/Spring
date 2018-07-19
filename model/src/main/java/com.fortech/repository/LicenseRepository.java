@@ -9,10 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface LicenseRepository extends JpaRepository<LicenseEntity, Long> {
     LicenseEntity findByGeneratedKey(String generatedKey);
 
-<<<<<<< HEAD
     LicenseEntity findByValidationKey(String validationKey);
-=======
 
 
->>>>>>> 4fe3c615203f3fa96192c2f3104e97943623cff3
 }
