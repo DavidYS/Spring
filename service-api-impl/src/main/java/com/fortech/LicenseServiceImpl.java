@@ -114,6 +114,11 @@ public class LicenseServiceImpl implements LicenseService{
                 nr++;
             }
         }
+        if(nr >= 1){
+            System.out.println("Sunt mai multe");
+        }
+
+        licenseRepository.save(licenseEntity);
         if(nr == 0){
             licenseRepository.save(licenseEntity);
         }

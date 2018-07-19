@@ -58,8 +58,10 @@ private LicenseRepository licenseRepository;*/
         String jsonDecoded = cipher.decrypt(jsonString);
 
         licenseDto = licenseService.generare(jsonDecoded);
+
         
         licenseService.saveLicense(licenseDto);
+
 
         System.out.println(licenseDto.getValidationKey());
 
