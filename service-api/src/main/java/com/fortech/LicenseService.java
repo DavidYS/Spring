@@ -15,7 +15,7 @@ public interface LicenseService {
 
     LicenseDto generare(String jsonString);
 
-    void saveLicense(LicenseDto licenseDto);
+    String saveLicense(LicenseDto licenseDto);
 
     List<LicenseDto> readAllLicenseDTO();
 
