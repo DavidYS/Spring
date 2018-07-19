@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import javax.persistence.Entity;
 
 
-@Entity
+
 public class GeneratedKey {
 
     private String hostName;
@@ -48,22 +48,26 @@ public class GeneratedKey {
     }
 
 
-    public GeneratedKey fromString(String json1) throws JsonParseException{
-        try {
+    public void generateFromString(String json1) throws JsonParseException{
+
             Gson gson = new Gson();
-            GeneratedKey generatedKey = gson.fromJson(json1, GeneratedKey.class);
+            GeneratedKey generatedKey = new GeneratedKey();
+            boolean thrown=false;
+        try {
+            generatedKey = gson.fromJson(json1, GeneratedKey.class);
+        }
+        catch(JsonParseException e)
+        {
+            System.out.println("String-ul nu poate fi parsat: "+json1);
+            thrown=true;
+        }
+        if(!thrown)
+        {
             this.setHostName(generatedKey.getHostName());
             this.setIpAddress(generatedKey.getIpAddress());
             this.setIpMac(generatedKey.getIpMac());
             this.setTimestamp(generatedKey.getTimestamp());
-            return generatedKey;
         }
-        catch(JsonParseException e)
-        {
-            System.out.println("Exceptie la parsarea string-ului: "+json1);
-            return null;
-        }
-
     }
 
     public String toString() {
@@ -71,6 +75,14 @@ public class GeneratedKey {
         String json = gson.toJson(this);
         return json;
 
+    }
+
+    public boolean notNull(){
+        if((this.getHostName()!=null)&&
+        (this.getIpAddress()!=null)&&
+                (this.getIpMac()!=null)&&
+                (this.getTimestamp()!=null))return true;
+        else return false;
     }
 }
 

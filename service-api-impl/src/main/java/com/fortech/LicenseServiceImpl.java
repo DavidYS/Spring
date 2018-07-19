@@ -80,7 +80,8 @@ public class LicenseServiceImpl implements LicenseService{
     {
         GeneratedKey generatedKey = new GeneratedKey();
         ValidationKey validationKey = new ValidationKey();
-        validationKey.generate(generatedKey.fromString(jsonString));
+        generatedKey.generateFromString(jsonString);
+        validationKey.generate(generatedKey);
 
         LicenseDto licenseDto = new LicenseDto();
         licenseDto.setGeneratedKey(generatedKey.toString());

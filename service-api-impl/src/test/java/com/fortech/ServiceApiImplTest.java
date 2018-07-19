@@ -99,7 +99,7 @@ public class ServiceApiImplTest {
     @Test
     public void generare_shouldReturnALicenseDTO(){
         String json1 =
-                "\""+"hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
+                "{"+"\""+"hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
                 "\""+"ipAddress"+"\""+":"+"\""+"192.168.216.152"+"\""+","+
                 "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
                 "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
@@ -107,12 +107,28 @@ public class ServiceApiImplTest {
         LicenseDto result = licenseServiceImpl.generare(json1);
 
         GeneratedKey generatedKey = new GeneratedKey();
+        generatedKey.generateFromString(json1);
         ValidationKey validationKey = new ValidationKey();
-        validationKey.generate(generatedKey.fromString(json1));
+        validationKey.generate(generatedKey);
 
-
+        assertEquals(generatedKey.toString(),result.getGeneratedKey().toString());
         assertEquals(validationKey.toString(),result.getValidationKey().toString());
-
-
     }
+
+
+    @Test
+    public void generare_shouldReturnAnEmptyLicenseDTO(){
+        String json1 =
+                "hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
+                        "\""+"ipAddress"+"\""+":"+"\""+"192.168.216.152"+"\""+","+
+                        "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
+                        "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
+
+        LicenseDto result = new LicenseDto();
+        result = licenseServiceImpl.generare(json1);
+
+        assertEquals("{}",result.getGeneratedKey());
+        assertEquals("{}",result.getValidationKey());
+    }
+
 }
