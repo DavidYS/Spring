@@ -25,31 +25,25 @@ public class LicenseServiceImpl implements LicenseService{
                 .collect(Collectors.toList());
     }
 
-    public String deleteLicenseDTO(String json1) {
+    public String deleteLicenseDTO(String json) {
 
         List<LicenseEntity> entities = licenseRepository.findAll();
-        int nr = 0;
+
+        int ok=0;
+
         for(LicenseEntity e : entities){
-            if(e.getGeneratedKey().equals(json1)){
-                nr++;
+            System.out.println();
+            System.out.println(e.getGeneratedKey());
+            if(e.getGeneratedKey().equals(json)){
+                licenseRepository.delete(e);
+                ok=1;
             }
         }
-        if(nr > 1){
-            System.out.println("Sunt mai multe");
-            return "Au fost găsite mai multe licențe";
-        }
 
-        LicenseEntity licenseEntity = licenseRepository.findByGeneratedKey(json1);
-        List<LicenseEntity> list = licenseRepository.findAll();
-        System.out.println(json1);
-        System.out.println(list.size());
-        if (licenseEntity != null) {
-            System.out.println(licenseEntity.getValidationKey());
-            licenseRepository.delete(licenseEntity);
-
+        if(ok==1){
             return "Licența a fost ștearsă.";
         } else {
-          return "Licența nu a fost găsită.";
+            return "Licența nu a fost găsită.";
         }
 
     }
