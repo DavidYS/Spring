@@ -56,6 +56,7 @@ public class LicenseControllerTest {
         String validationKey = "dsfg";
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
+
         List<LicenseDto> licenseEntities = Collections.singletonList(licenseEntity.toDto());
         when(licenseServiceMock.deleteLicenseDTO(generatedKey)).thenReturn("Licența a fost ștearsă.");
 
@@ -90,4 +91,7 @@ public class LicenseControllerTest {
 
         assertEquals(licenseDto, result);
     }
+
+
 }
+
