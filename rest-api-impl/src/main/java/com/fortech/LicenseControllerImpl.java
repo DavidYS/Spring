@@ -59,11 +59,6 @@ private LicenseRepository licenseRepository;*/
 
         licenseDto = licenseService.generare(jsonDecoded);
 
-        String response;
-        response = licenseService.saveLicense(licenseDto);
-
-        System.out.println(response);
-
         System.out.println(licenseDto.getValidationKey());
 
         return cipher.encrypt(licenseDto.getValidationKey());
