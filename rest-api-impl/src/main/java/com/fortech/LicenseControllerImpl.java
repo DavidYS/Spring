@@ -30,8 +30,10 @@ private LicenseRepository licenseRepository;*/
     @DeleteMapping("/delete/{generatedkey}")
     public String deleteByGeneratedKey(@PathVariable("generatedkey") String generatedkey){
 
-        Cipher cipher = new Cipher();
-        String jsonDecoded = cipher.decrypt(generatedkey);
+        //Cipher cipher = new Cipher();
+        String jsonDecoded = Cipher.decrypt(generatedkey);
+
+        //System.out.println(jsonDecoded);
 
         Gson gson = new Gson();
         GeneratedKey generate = gson.fromJson(jsonDecoded, GeneratedKey.class);
@@ -48,8 +50,8 @@ private LicenseRepository licenseRepository;*/
     @GetMapping("/findone/{generatedkey}")
     public LicenseDto readOne(@PathVariable("generatedkey") String generatedKey){
 
-        Cipher cipher = new Cipher();
-        String jsonDecoded = cipher.decrypt(generatedKey);
+        //Cipher cipher = new Cipher();
+        String jsonDecoded = Cipher.decrypt(generatedKey);
 
         GeneratedKey generatedKey1 = new GeneratedKey();
         generatedKey1.generateFromString(jsonDecoded);
@@ -72,8 +74,8 @@ private LicenseRepository licenseRepository;*/
     public String generateLicense(@PathVariable String jsonString) {
         LicenseDto licenseDto = new LicenseDto();
 
-        Cipher cipher = new Cipher();
-        String jsonDecoded = cipher.decrypt(jsonString);
+        //Cipher cipher = new Cipher();
+        String jsonDecoded = Cipher.decrypt(jsonString);
 
         licenseDto = licenseService.generare(jsonDecoded);
 
@@ -81,7 +83,7 @@ private LicenseRepository licenseRepository;*/
 
         System.out.println(licenseDto.getValidationKey());
 
-        return cipher.encrypt(licenseDto.getValidationKey());
+        return Cipher.encrypt(licenseDto.getValidationKey());
 
     }
 
