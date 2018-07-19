@@ -15,12 +15,14 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 
@@ -167,4 +169,18 @@ public class ServiceApiImplTest {
         Mockito.verify(licenseRepositoryMock, timeout(1)).save(argThat(license -> license.getValidationKey().equals(validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
     }
 
+
+    @Test
+    public void deleteLicenseDTO_ShouldReturnAResponse(){
+        LicenseDto licenseEntity = new LicenseDto();
+        String generatedKey = "abc";
+        String validationKey = "def";
+        licenseEntity.setGeneratedKey(generatedKey);
+        licenseEntity.setValidationKey(validationKey);
+
+        licenseServiceImpl.deleteLicenseDTO(generatedKey);
+
+        Mockito.verify(licenseRepositoryMock, times(1)).delete(licenseEntity.getValidationKey() , licenseEntity.getGeneratedKey()zz);
+
+    }
 }

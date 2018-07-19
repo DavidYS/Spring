@@ -32,7 +32,6 @@ public class LicenseServiceImpl implements LicenseService{
         int ok=0;
 
         for(LicenseEntity e : entities){
-            System.out.println();
             System.out.println(e.getGeneratedKey());
             if(e.getGeneratedKey().equals(json)){
                 licenseRepository.delete(e);
