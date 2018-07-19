@@ -83,6 +83,20 @@ public class ServiceApiImplTest {
     @Test
     public void findLicenseDto_ifFound()
     {
+        LicenseEntity licenseEntity = new LicenseEntity();
+        String generatedKey = "abc";
+        String validationKey = "def";
+        licenseEntity.setGeneratedKey(generatedKey);
+        licenseEntity.setValidationKey(validationKey);
+
+        when(licenseRepositoryMock.findByGeneratedKey(generatedKey)).thenReturn(licenseEntity);
+
+
+
+        LicenseEntity result = licenseRepositoryMock.findByGeneratedKey(generatedKey);
+
+        assertEquals(generatedKey, result.getGeneratedKey());
+        assertEquals(validationKey, result.getValidationKey());
 
     }
     
@@ -90,7 +104,18 @@ public class ServiceApiImplTest {
     @Test
     public void findLicenseDto_ifNotFound()
     {
+        LicenseEntity licenseEntity = new LicenseEntity();
+        String generatedKey = "abc";
+        String validationKey = "def";
+        licenseEntity.setGeneratedKey(generatedKey);
+        licenseEntity.setValidationKey(validationKey);
 
+        when(licenseRepositoryMock.findByGeneratedKey(generatedKey+"12515")).thenReturn(licenseEntity);
+
+
+        LicenseEntity result = licenseRepositoryMock.findByGeneratedKey(generatedKey);
+
+        assertEquals(null, result);
     }
 
 
