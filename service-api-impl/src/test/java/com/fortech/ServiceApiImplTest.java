@@ -124,8 +124,7 @@ public class ServiceApiImplTest {
                         "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
                         "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
 
-        LicenseDto result = new LicenseDto();
-        result = licenseServiceImpl.generare(json1);
+        LicenseDto result = licenseServiceImpl.generare(json1);
 
         assertEquals("{}",result.getGeneratedKey());
         assertEquals("{}",result.getValidationKey());

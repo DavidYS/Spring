@@ -2,6 +2,8 @@ package com.fortech;
 
 import com.fortech.dto.LicenseDto;
 import com.fortech.encrypt.Cipher;
+import com.fortech.entity.GeneratedKey;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +52,7 @@ private LicenseRepository licenseRepository;*/
         String jsonDecoded = cipher.decrypt(generatedKey);
 
         GeneratedKey generatedKey1 = new GeneratedKey();
-        generatedKey1.fromString(jsonDecoded);
+        generatedKey1.generateFromString(jsonDecoded);
         String json1 = generatedKey1.toString();
 
         System.out.println(json1);
