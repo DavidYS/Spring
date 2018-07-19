@@ -34,8 +34,11 @@ private LicenseRepository licenseRepository;*/
         Gson gson = new Gson();
         GeneratedKey generate = gson.fromJson(jsonDecoded, GeneratedKey.class);
 
+        String json1 = generate.toString();
         System.out.println(generate);
-        return licenseService.deleteLicenseDTO(generate);
+
+        System.out.println(json1);
+        return licenseService.deleteLicenseDTO(json1);
 
         //return new LicenseEntity();
     }
