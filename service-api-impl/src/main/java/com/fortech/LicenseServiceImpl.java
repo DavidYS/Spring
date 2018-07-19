@@ -96,7 +96,7 @@ public class LicenseServiceImpl implements LicenseService{
     }
 
     @Override
-    public void saveLicense(LicenseDto licenseDto) {
+    public String saveLicense(LicenseDto licenseDto) {
         /*LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity = licenseDto.toEntity();
         licenseRepository.save(licenseEntity);*/
