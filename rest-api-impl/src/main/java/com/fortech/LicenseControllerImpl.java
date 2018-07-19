@@ -59,6 +59,10 @@ private LicenseRepository licenseRepository;*/
 
         licenseDto = licenseService.generare(jsonDecoded);
 
+        
+        licenseService.saveLicense(licenseDto);
+
+
         System.out.println(licenseDto.getValidationKey());
 
         return cipher.encrypt(licenseDto.getValidationKey());

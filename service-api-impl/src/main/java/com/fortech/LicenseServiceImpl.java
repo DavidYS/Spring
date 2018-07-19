@@ -119,6 +119,9 @@ public class LicenseServiceImpl implements LicenseService{
         }
 
         licenseRepository.save(licenseEntity);
+        if(nr == 0){
+            licenseRepository.save(licenseEntity);
+        }
     }
 
 }
