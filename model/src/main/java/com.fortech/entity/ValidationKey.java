@@ -2,6 +2,7 @@ package com.fortech.entity;
 
 import com.google.gson.Gson;
 
+import javax.persistence.Entity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,21 +74,21 @@ public class ValidationKey {
         this.client = client;
     }
 
-    public void generate(GeneratedKey generatedKey) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Calendar cal = Calendar.getInstance();
-        Date date_start = cal.getTime();
-        cal.add(Calendar.YEAR, 1); // to get previous year add -1
-        Date date_finish = cal.getTime();
-
-        this.setHostName(generatedKey.getHostName());
-        this.setIpAddress(generatedKey.getIpAddress());
-        this.setIpMac(generatedKey.getIpMac());
-        this.setTimestamp(generatedKey.getTimestamp());
-        this.setStart_date(sdf.format(date_start));
-        this.setFinish_date(sdf.format(date_finish));
-        //Client
-        this.setClient("Client");
+    public void generate(GeneratedKey generatedKey){
+        if(generatedKey.notNull()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            Calendar cal = Calendar.getInstance();
+            Date date_start = cal.getTime();
+            cal.add(Calendar.YEAR, 1); // to get previous year add -1
+            Date date_finish = cal.getTime();
+            this.setHostName(generatedKey.getHostName());
+            this.setIpAddress(generatedKey.getIpAddress());
+            this.setIpMac(generatedKey.getIpMac());
+            this.setTimestamp(generatedKey.getTimestamp());
+            this.setStart_date(sdf.format(date_start));
+            this.setFinish_date(sdf.format(date_finish));
+            this.setClient(System.getProperty("user.name"));
+        }
     }
 
 

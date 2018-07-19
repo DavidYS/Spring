@@ -1,26 +1,26 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
+import com.fortech.entity.GeneratedKey;
 import com.fortech.entity.LicenseEntity;
+import com.fortech.entity.ValidationKey;
 import com.fortech.repository.LicenseRepository;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.validation.constraints.AssertTrue;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.ignoreStubs;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.when;
 
 
@@ -116,6 +116,55 @@ public class ServiceApiImplTest {
         LicenseEntity result = licenseRepositoryMock.findByGeneratedKey(generatedKey);
 
         assertEquals(null, result);
+    }
+
+
+    @Test
+    public void generare_shouldReturnALicenseDTO(){
+        String json1 =
+                "{"+"\""+"hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
+                "\""+"ipAddress"+"\""+":"+"\""+"192.168.216.152"+"\""+","+
+                "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
+                "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
+
+        LicenseDto result = licenseServiceImpl.generare(json1);
+
+        GeneratedKey generatedKey = new GeneratedKey();
+        generatedKey.generateFromString(json1);
+        ValidationKey validationKey = new ValidationKey();
+        validationKey.generate(generatedKey);
+
+        assertEquals(generatedKey.toString(),result.getGeneratedKey().toString());
+        assertEquals(validationKey.toString(),result.getValidationKey().toString());
+    }
+
+
+    @Test
+    public void generare_shouldReturnAnEmptyLicenseDTO(){
+        String json1 =
+                "hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
+                        "\""+"ipAddress"+"\""+":"+"\""+"192.168.216.152"+"\""+","+
+                        "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
+                        "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
+
+        LicenseDto result = licenseServiceImpl.generare(json1);
+
+        assertEquals("{}",result.getGeneratedKey());
+        assertEquals("{}",result.getValidationKey());
+    }
+
+    @Test
+    public void saveLicense_shouldVerifyIfSaveLicenseMethodIsCalled() {
+
+        LicenseDto licenseDto=new LicenseDto();
+        String generatedKeyTest = "generatedKeyTest";
+        licenseDto.setGeneratedKey(generatedKeyTest);
+        String validationKeyDto = "validationKeyDto";
+        licenseDto.setValidationKey(validationKeyDto);
+
+        licenseServiceImpl.saveLicense(licenseDto);
+
+        Mockito.verify(licenseRepositoryMock, timeout(1)).save(argThat(license -> license.getValidationKey().equals(validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
     }
 
 }
