@@ -57,9 +57,9 @@ public class LicenseControllerTest {
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
         List<LicenseDto> licenseEntities = Collections.singletonList(licenseEntity.toDto());
-        when(licenseServiceMock.deleteLicenseDTO("sd")).thenReturn("Licența a fost ștearsă.");
+        when(licenseServiceMock.deleteLicenseDTO(generatedKey)).thenReturn("Licența a fost ștearsă.");
 
-        String result = licenseServiceMock.deleteLicenseDTO("sd");
+        String result = licenseServiceMock.deleteLicenseDTO(generatedKey);
 
         assertEquals("Licența a fost ștearsă.", result);
     }
@@ -71,11 +71,12 @@ public class LicenseControllerTest {
         String validationKey = "dsfg";
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
-        when(licenseServiceMock.findLicenseDto("sd")).thenReturn(licenseEntity.toDto());
+        when(licenseServiceMock.findLicenseDto(generatedKey)).thenReturn(licenseEntity.toDto());
 
-       LicenseDto result = licenseServiceMock.findLicenseDto("sd");
+       LicenseDto result = licenseServiceMock.findLicenseDto(generatedKey);
 
-        assertEquals(licenseEntity, result.toEntity());
+        assertEquals(generatedKey, result.getGeneratedKey());
+        assertEquals(validationKey, result.getValidationKey());
 
     }
 
