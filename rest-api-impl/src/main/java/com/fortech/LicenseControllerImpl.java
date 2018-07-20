@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.json.*;
 
 
 @CrossOrigin
@@ -27,20 +28,40 @@ private LicenseRepository licenseRepository;*/
 
     }
 
+    public boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            // edited, to include @Arthur's comment
+            // e.g. in case JSONArray is valid as well...
+            try {
+                new JSONArray(test);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @DeleteMapping("/delete/{generatedkey}")
     public String deleteByGeneratedKey(@PathVariable("generatedkey") String generatedkey){
 
-        Cipher cipher = new Cipher();
-        String jsonDecoded = cipher.decrypt(generatedkey);
+        //Cipher cipher = new Cipher();
+        String jsonDecoded = Cipher.decrypt(generatedkey);
 
-        Gson gson = new Gson();
-        GeneratedKey generate = gson.fromJson(jsonDecoded, GeneratedKey.class);
+        //System.out.println(jsonDecoded);
+        if(isJSONValid(jsonDecoded)) {
 
-        String json1 = generate.toString();
-        System.out.println(generate);
+            Gson gson = new Gson();
+            GeneratedKey generate = gson.fromJson(jsonDecoded, GeneratedKey.class);
 
-        System.out.println(json1);
-        return licenseService.deleteLicenseDTO(json1);
+            String json1 = generate.toString();
+            System.out.println(generate);
+
+            System.out.println(json1);
+            return licenseService.deleteLicenseDTO(json1);
+        }
+        return null;
 
         //return new LicenseEntity();
     }
@@ -48,15 +69,22 @@ private LicenseRepository licenseRepository;*/
     @GetMapping("/findone/{generatedkey}")
     public LicenseDto readOne(@PathVariable("generatedkey") String generatedKey){
 
-        Cipher cipher = new Cipher();
-        String jsonDecoded = cipher.decrypt(generatedKey);
+        //Cipher cipher = new Cipher();
+        String jsonDecoded = Cipher.decrypt(generatedKey);
+        System.out.println(jsonDecoded);
+        System.out.println("STRING");
 
-        GeneratedKey generatedKey1 = new GeneratedKey();
-        generatedKey1.generateFromString(jsonDecoded);
-        String json1 = generatedKey1.toString();
+        if(isJSONValid(jsonDecoded)) {
 
-        System.out.println(json1);
-        return licenseService.findLicenseDto(json1);
+            GeneratedKey generatedKey1 = new GeneratedKey();
+            generatedKey1.generateFromString(jsonDecoded);
+            String json1 = generatedKey1.toString();
+
+            System.out.println(json1);
+            return licenseService.findLicenseDto(json1);
+        }
+        System.out.println("NU A MERS MAI DEPARTE");
+        return null;
 
     }
 
@@ -72,16 +100,23 @@ private LicenseRepository licenseRepository;*/
     public String generateLicense(@PathVariable String jsonString) {
         LicenseDto licenseDto = new LicenseDto();
 
-        Cipher cipher = new Cipher();
-        String jsonDecoded = cipher.decrypt(jsonString);
+        //Cipher cipher = new Cipher();
+        String jsonDecoded = Cipher.decrypt(jsonString);
 
-        licenseDto = licenseService.generare(jsonDecoded);
+        System.out.println(jsonDecoded);
+        System.out.println("STRING");
 
-        licenseService.saveLicense(licenseDto);
+        if(isJSONValid(jsonDecoded)) {
+            licenseDto = licenseService.generare(jsonDecoded);
 
-        System.out.println(licenseDto.getValidationKey());
+            licenseService.saveLicense(licenseDto);
 
-        return cipher.encrypt(licenseDto.getValidationKey());
+            System.out.println(licenseDto.getValidationKey());
+
+            return Cipher.encrypt(licenseDto.getValidationKey());
+        }
+        System.out.println("NU A MERS MAI DEPARTE");
+        return null;
 
     }
 

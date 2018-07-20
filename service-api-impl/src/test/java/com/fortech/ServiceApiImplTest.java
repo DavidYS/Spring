@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -24,14 +25,14 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ServiceApiImplTest {
 
     @InjectMocks
-   private LicenseServiceImpl licenseServiceImpl;
+    private LicenseServiceImpl licenseServiceImpl;
 
     @Mock
- private LicenseRepository licenseRepositoryMock;
+    private LicenseRepository licenseRepositoryMock;
 
 
     @Before
@@ -54,7 +55,7 @@ public class ServiceApiImplTest {
         licenseEntity2.setGeneratedKey(generatedKey2);
         licenseEntity2.setValidationKey(validationKey2);
 
-        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2 );
+        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2);
         when(licenseRepositoryMock.findAll()).thenReturn(licenseEntities);
 
         List<LicenseDto> result = licenseServiceImpl.readAllLicenseDTO();
@@ -81,8 +82,7 @@ public class ServiceApiImplTest {
     }
 
     @Test
-    public void findLicenseDto_ifFound()
-    {
+    public void findLicenseDto_ifFound() {
         LicenseEntity licenseEntity = new LicenseEntity();
         String generatedKey = "abc";
         String validationKey = "def";
@@ -92,25 +92,23 @@ public class ServiceApiImplTest {
         when(licenseRepositoryMock.findByGeneratedKey(generatedKey)).thenReturn(licenseEntity);
 
 
-
         LicenseEntity result = licenseRepositoryMock.findByGeneratedKey(generatedKey);
 
         assertEquals(generatedKey, result.getGeneratedKey());
         assertEquals(validationKey, result.getValidationKey());
 
     }
-    
+
 
     @Test
-    public void findLicenseDto_ifNotFound()
-    {
+    public void findLicenseDto_ifNotFound() {
         LicenseEntity licenseEntity = new LicenseEntity();
         String generatedKey = "abc";
         String validationKey = "def";
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
 
-        when(licenseRepositoryMock.findByGeneratedKey(generatedKey+"12515")).thenReturn(licenseEntity);
+        when(licenseRepositoryMock.findByGeneratedKey(generatedKey + "12515")).thenReturn(licenseEntity);
 
 
         LicenseEntity result = licenseRepositoryMock.findByGeneratedKey(generatedKey);
@@ -120,12 +118,12 @@ public class ServiceApiImplTest {
 
 
     @Test
-    public void generare_shouldReturnALicenseDTO(){
+    public void generare_shouldReturnALicenseDTO() {
         String json1 =
-                "{"+"\""+"hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
-                "\""+"ipAddress"+"\""+":"+"\""+"192.168.216.152"+"\""+","+
-                "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
-                "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
+                "{" + "\"" + "hostname" + "\"" + ":" + "\"" + "ws-bh-internship" + "\"" + "," +
+                        "\"" + "ipAddress" + "\"" + ":" + "\"" + "192.168.216.152" + "\"" + "," +
+                        "\"" + "ipMac" + "\"" + ":" + "\"" + "18-03-73-DD-20-2A" + "\"" + "," +
+                        "\"" + "timestamp" + "\"" + ":" + "\"" + "1531919716062" + "\"" + "}";
 
         LicenseDto result = licenseServiceImpl.generare(json1);
 
@@ -134,29 +132,29 @@ public class ServiceApiImplTest {
         ValidationKey validationKey = new ValidationKey();
         validationKey.generate(generatedKey);
 
-        assertEquals(generatedKey.toString(),result.getGeneratedKey().toString());
-        assertEquals(validationKey.toString(),result.getValidationKey().toString());
+        assertEquals(generatedKey.toString(), result.getGeneratedKey().toString());
+        assertEquals(validationKey.toString(), result.getValidationKey().toString());
     }
 
 
     @Test
-    public void generare_shouldReturnAnEmptyLicenseDTO(){
+    public void generare_shouldReturnAnEmptyLicenseDTO() {
         String json1 =
-                "hostname"+"\""+":"+"\""+"ws-bh-internship"+"\""+","+
-                        "\""+"ipAddress"+"\""+":"+"\""+"192.168.216.152"+"\""+","+
-                        "\""+"ipMac"+"\""+":"+"\""+"18-03-73-DD-20-2A"+"\""+","+
-                        "\""+"timestamp"+"\""+":"+"\""+"1531919716062"+"\""+"}";
+                "hostname" + "\"" + ":" + "\"" + "ws-bh-internship" + "\"" + "," +
+                        "\"" + "ipAddress" + "\"" + ":" + "\"" + "192.168.216.152" + "\"" + "," +
+                        "\"" + "ipMac" + "\"" + ":" + "\"" + "18-03-73-DD-20-2A" + "\"" + "," +
+                        "\"" + "timestamp" + "\"" + ":" + "\"" + "1531919716062" + "\"" + "}";
 
         LicenseDto result = licenseServiceImpl.generare(json1);
 
-        assertEquals("{}",result.getGeneratedKey());
-        assertEquals("{}",result.getValidationKey());
+        assertEquals("{}", result.getGeneratedKey());
+        assertEquals("{}", result.getValidationKey());
     }
 
     @Test
     public void saveLicense_shouldVerifyIfSaveLicenseMethodIsCalled() {
 
-        LicenseDto licenseDto=new LicenseDto();
+        LicenseDto licenseDto = new LicenseDto();
         String generatedKeyTest = "generatedKeyTest";
         licenseDto.setGeneratedKey(generatedKeyTest);
         String validationKeyDto = "validationKeyDto";
@@ -167,8 +165,8 @@ public class ServiceApiImplTest {
         Mockito.verify(licenseRepositoryMock, timeout(1)).save(argThat(license -> license.getValidationKey().equals(validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
     }
 
-
     @Test
+<<<<<<< HEAD
     public void deleteLicenseDTO_shouldVerifyIfDeleteMethodIsCalled(){
         LicenseDto licenseEntity = new LicenseDto();
         String generatedKey = "abc";
@@ -180,5 +178,29 @@ public class ServiceApiImplTest {
 
         licenseServiceImpl.deleteLicenseDTO(generatedKey);
         verify(licenseRepositoryMock).delete(licenseRepositoryMock.findByGeneratedKey(generatedKey));
+=======
+    public void deleteOneLicense_testOk(){
+
+        LicenseEntity licenseEntity1 = new LicenseEntity();
+        String generatedKey1 = "abc";
+        String validationKey1 = "def";
+        licenseEntity1.setGeneratedKey(generatedKey1);
+        licenseEntity1.setValidationKey(validationKey1);
+
+        LicenseEntity licenseEntity2 = new LicenseEntity();
+        String generatedKey2 = "ghj";
+        String validationKey2 = "tyu";
+        licenseEntity2.setGeneratedKey(generatedKey2);
+        licenseEntity2.setValidationKey(validationKey2);
+
+        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2 );
+
+        when(licenseRepositoryMock.findAll()).thenReturn(licenseEntities);
+
+        String response = licenseServiceImpl.deleteLicenseDTO(generatedKey2);
+
+        assertEquals("Licența a fost ștearsă.",response);
+        verify(licenseRepositoryMock, times(1)).delete(licenseEntity2);
+>>>>>>> 35e52b66759533848898f7b25f18522d0aae1252
     }
 }
