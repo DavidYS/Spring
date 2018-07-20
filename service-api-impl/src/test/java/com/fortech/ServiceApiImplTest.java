@@ -21,9 +21,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -171,16 +169,16 @@ public class ServiceApiImplTest {
 
 
     @Test
-    public void deleteLicenseDTO_ShouldReturnAResponse(){
+    public void deleteLicenseDTO_shouldVerifyIfDeleteMethodIsCalled(){
         LicenseDto licenseEntity = new LicenseDto();
         String generatedKey = "abc";
         String validationKey = "def";
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
 
+        licenseRepositoryMock.findByGeneratedKey("abc");
+
         licenseServiceImpl.deleteLicenseDTO(generatedKey);
-
-        Mockito.verify(licenseRepositoryMock, times(1)).delete(licenseEntity.getValidationKey() , licenseEntity.getGeneratedKey()zz);
-
+        verify(licenseRepositoryMock).delete(licenseRepositoryMock.findByGeneratedKey(generatedKey));
     }
 }
