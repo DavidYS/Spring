@@ -166,8 +166,8 @@ public class ServiceApiImplTest {
     }
 
     @Test
-<<<<<<< HEAD
-    public void deleteLicenseDTO_shouldVerifyIfDeleteMethodIsCalled(){
+
+    public void deleteLicenseDTO_shouldVerifyIfDeleteMethodIsCalled() {
         LicenseDto licenseEntity = new LicenseDto();
         String generatedKey = "abc";
         String validationKey = "def";
@@ -178,8 +178,10 @@ public class ServiceApiImplTest {
 
         licenseServiceImpl.deleteLicenseDTO(generatedKey);
         verify(licenseRepositoryMock).delete(licenseRepositoryMock.findByGeneratedKey(generatedKey));
-=======
-    public void deleteOneLicense_testOk(){
+    }
+
+    @Test
+    public void deleteOneLicense_testOk() {
 
         LicenseEntity licenseEntity1 = new LicenseEntity();
         String generatedKey1 = "abc";
@@ -193,14 +195,15 @@ public class ServiceApiImplTest {
         licenseEntity2.setGeneratedKey(generatedKey2);
         licenseEntity2.setValidationKey(validationKey2);
 
-        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2 );
+        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2);
 
         when(licenseRepositoryMock.findAll()).thenReturn(licenseEntities);
 
         String response = licenseServiceImpl.deleteLicenseDTO(generatedKey2);
 
-        assertEquals("Licența a fost ștearsă.",response);
+        assertEquals("Licența a fost ștearsă.", response);
         verify(licenseRepositoryMock, times(1)).delete(licenseEntity2);
->>>>>>> 35e52b66759533848898f7b25f18522d0aae1252
+
+
     }
 }
