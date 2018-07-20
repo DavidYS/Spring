@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,9 +22,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -166,18 +165,28 @@ public class ServiceApiImplTest {
         Mockito.verify(licenseRepositoryMock, timeout(1)).save(argThat(license -> license.getValidationKey().equals(validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
     }
 
+    @Test
+    public void deleteOneLicense_testOk(){
 
-//    @Test
-//    public void deleteLicenseDTO_ShouldReturnAResponse(){
-//        LicenseDto licenseEntity = new LicenseDto();
-//        String generatedKey = "abc";
-//        String validationKey = "def";
-//        licenseEntity.setGeneratedKey(generatedKey);
-//        licenseEntity.setValidationKey(validationKey);
-//
-//        licenseServiceImpl.deleteLicenseDTO(generatedKey);
-//
-//        Mockito.verify(licenseRepositoryMock, times(1)).delete(licenseEntity.getValidationKey() , licenseEntity.getGeneratedKey());
-//
-//    }
+        LicenseEntity licenseEntity1 = new LicenseEntity();
+        String generatedKey1 = "abc";
+        String validationKey1 = "def";
+        licenseEntity1.setGeneratedKey(generatedKey1);
+        licenseEntity1.setValidationKey(validationKey1);
+
+        LicenseEntity licenseEntity2 = new LicenseEntity();
+        String generatedKey2 = "ghj";
+        String validationKey2 = "tyu";
+        licenseEntity2.setGeneratedKey(generatedKey2);
+        licenseEntity2.setValidationKey(validationKey2);
+
+        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2 );
+
+        when(licenseRepositoryMock.findAll()).thenReturn(licenseEntities);
+
+        String response = licenseServiceImpl.deleteLicenseDTO(generatedKey2);
+
+        assertEquals("Licența a fost ștearsă.",response);
+        verify(licenseRepositoryMock, times(1)).delete(licenseEntity2);
+    }
 }
