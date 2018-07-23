@@ -1,9 +1,9 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
-import com.fortech.entity.GeneratedKey;
+import com.fortech.keys.GeneratedKey;
 import com.fortech.entity.LicenseEntity;
-import com.fortech.entity.ValidationKey;
+import com.fortech.keys.ValidationKey;
 import com.fortech.repository.LicenseRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,10 +13,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -91,12 +91,8 @@ public class ServiceApiImplTest {
 
         when(licenseRepositoryMock.findByGeneratedKey(generatedKey)).thenReturn(licenseEntity);
 
-
-        LicenseEntity result = licenseRepositoryMock.findByGeneratedKey(generatedKey);
-
-        assertEquals(generatedKey, result.getGeneratedKey());
-        assertEquals(validationKey, result.getValidationKey());
-
+        ResponseEntity result = licenseServiceImpl.findLicenseDto(generatedKey);
+        assertTrue(result.getStatusCode()==HttpStatus.OK);
     }
 
 
@@ -110,10 +106,8 @@ public class ServiceApiImplTest {
 
         when(licenseRepositoryMock.findByGeneratedKey(generatedKey + "12515")).thenReturn(licenseEntity);
 
-
-        LicenseEntity result = licenseRepositoryMock.findByGeneratedKey(generatedKey);
-
-        assertEquals(null, result);
+        ResponseEntity result = licenseServiceImpl.findLicenseDto(generatedKey);
+        assertTrue(result.getStatusCode()==HttpStatus.NOT_FOUND);
     }
 
 
@@ -162,48 +156,46 @@ public class ServiceApiImplTest {
 
         licenseServiceImpl.saveLicense(licenseDto);
 
-        Mockito.verify(licenseRepositoryMock, timeout(1)).save(argThat(license -> license.getValidationKey().equals(validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
+        Mockito.verify(licenseRepositoryMock, times(1)).save(argThat(license -> license.getValidationKey().equals
+                (validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
     }
 
     @Test
 
     public void deleteLicenseDTO_shouldVerifyIfDeleteMethodIsCalled() {
         LicenseDto licenseEntity = new LicenseDto();
-        String generatedKey = "abc";
-        String validationKey = "def";
-        licenseEntity.setGeneratedKey(generatedKey);
-        licenseEntity.setValidationKey(validationKey);
+        String generatedKeyTest = "generatedKeyTest";
+        String validationKeyDto = "validationKeyDto";
+        licenseEntity.setGeneratedKey(generatedKeyTest);
+        licenseEntity.setValidationKey(validationKeyDto);
 
-        licenseRepositoryMock.findByGeneratedKey("abc");
+        licenseRepositoryMock.findByGeneratedKey("generatedKeyTest");
 
-        licenseServiceImpl.deleteLicenseDTO(generatedKey);
-        verify(licenseRepositoryMock).delete(licenseRepositoryMock.findByGeneratedKey(generatedKey));
+        licenseServiceImpl.deleteLicenseDTO(generatedKeyTest);
+
+        verify(licenseRepositoryMock).delete(licenseRepositoryMock.findByGeneratedKey(generatedKeyTest));
     }
 
     @Test
     public void deleteOneLicense_testOk() {
 
-        LicenseEntity licenseEntity1 = new LicenseEntity();
-        String generatedKey1 = "abc";
-        String validationKey1 = "def";
-        licenseEntity1.setGeneratedKey(generatedKey1);
-        licenseEntity1.setValidationKey(validationKey1);
+        LicenseEntity deleteOneLicenseEntityTest = new LicenseEntity();
+        String generatedKeyTest = "generatedKeyTest";
+        String validationKeyDto = "validationKeyDto";
+        deleteOneLicenseEntityTest.setGeneratedKey(generatedKeyTest);
+        deleteOneLicenseEntityTest.setValidationKey(validationKeyDto);
 
-        LicenseEntity licenseEntity2 = new LicenseEntity();
-        String generatedKey2 = "ghj";
-        String validationKey2 = "tyu";
-        licenseEntity2.setGeneratedKey(generatedKey2);
-        licenseEntity2.setValidationKey(validationKey2);
+        LicenseEntity deleteOneLicenseDtoTest = new LicenseEntity();
+        String generatedKeyExample = "generatedKeyExample";
+        String validationKeyExample = "validationKeyExample";
+        deleteOneLicenseDtoTest.setGeneratedKey(generatedKeyExample);
+        deleteOneLicenseDtoTest.setValidationKey(validationKeyExample);
 
-        List<LicenseEntity> licenseEntities = Arrays.asList(licenseEntity1, licenseEntity2);
+        List<LicenseEntity> licenseEntities = Arrays.asList(deleteOneLicenseEntityTest, deleteOneLicenseDtoTest);
 
         when(licenseRepositoryMock.findAll()).thenReturn(licenseEntities);
 
-        String response = licenseServiceImpl.deleteLicenseDTO(generatedKey2);
-
-        assertEquals("Licența a fost ștearsă.", response);
-        verify(licenseRepositoryMock, times(1)).delete(licenseEntity2);
-
-
+        licenseServiceImpl.deleteLicenseDTO(generatedKeyExample);
+        verify(licenseRepositoryMock, times(1)).delete(deleteOneLicenseDtoTest);
     }
 }

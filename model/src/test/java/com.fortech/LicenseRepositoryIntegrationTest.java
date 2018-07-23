@@ -1,87 +1,76 @@
-
-//
-//    package com.fortech;
-//
-//import com.fortech.entity.LicenseEntity;
-//import com.fortech.repository.LicenseRepository;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-//import org.springframework.test.context.junit4.SpringRunner;
-//
-//import static org.hamcrest.CoreMatchers.equalTo;
-//import static org.hamcrest.CoreMatchers.is;
-//import static org.junit.Assert.assertThat;
-//
-//    @RunWith(SpringRunner.class)
-//    @DataJpaTest
-//    @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//    public class LicenseRepositoryIntegrationTest {
-//
-//        @Autowired
-//        private TestEntityManager entityManager;
-//
-//        @Autowired
-//        private LicenseRepository licenseRepository;
-//
-//        @Test
-//        public void testFindByValidationKey() {
-//
-//            //setup data scenario
-//            LicenseEntity license = new LicenseEntity();
-//            license.setValidationKey("CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKH19WG0BWRkcdW0pDSxAREh0ZOkkSEQZQX1YcUkhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDXFkdXEhLHV5fD1VNFh5EBgYbS1lHGgEZAF8dFgsbFVZQ");
-//            entityManager.persist(license);
-//
-//            //find an inserted record using repository class
-//            LicenseEntity foundLicense = licenseRepository.findByValidationKey("CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKH19WG0BWRkcdW0pDSxAREh0ZOkkSEQZQX1YcUkhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDXFkdXEhLHV5fD1VNFh5EBgYbS1lHGgEZAF8dFgsbFVZQ");
-//
-//            //assertion
-//            assertThat(foundLicense.getValidationKey(), is(equalTo("CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKH19WG0BWRkcdW0pDSxAREh0ZOkkSEQZQX1YcUkhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDXFkdXEhLHV5fD1VNFh5EBgYbS1lHGgEZAF8dFgsbFVZQ")));
-//        }
-//    }
-//}
 package com.fortech;
 
 import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class LicenseRepositoryIntegrationTest {
-
-    @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
-    private LicenseRepository licenseRepository;
-
-    @Test
-    public void testFindByValidationKey() {
-
-        //setup data scenario
-        LicenseEntity license = new LicenseEntity();
-        license.setValidationKey("CGVNRQ8bChAGKxVADkdDDU0TXhwdWD1dFwE_BQYdXlhUVQ9fb0NSRx1dKgEdXwoVXltVVVAcUV9BWU1UXV5PSSdTRUEGDBlIGBEYQB9EF1lNREceUlBWXlNURVxaUA95GA");
-        entityManager.persist(license);
-
-        //find an inserted record using repository class
-        LicenseEntity foundLicense = licenseRepository.findByValidationKey("CGVNRQ8bChAGKxVADkdDDU0TXhwdWD1dFwE_BQYdXlhUVQ9fb0NSRx1dKgEdXwoVXltVVVAcUV9BWU1UXV5PSSdTRUEGDBlIGBEYQB9EF1lNREceUlBWXlNURVxaUA95GA");
-
-        //assertion
-        assertThat(foundLicense.getValidationKey(), is(equalTo("CGVNRQ8bChAGKxVADkdDDU0TXhwdWD1dFwE_BQYdXlhUVQ9fb0NSRx1dKgEdXwoVXltVVVAcUV9BWU1UXV5PSSdTRUEGDBlIGBEYQB9EF1lNREceUlBWXlNURVxaUA95GA")));
-    }
-}
+////@RunWith(SpringRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//public class LicenseRepositoryIntegrationTest {
+//
+////    @Autowired
+////    private TestEntityManager entityManager;
+//
+//    @Autowired
+//    private LicenseRepository licenseRepository;
+//
+//
+//    @Before
+//    public void setup() {
+//
+//        for (int i = 1; i <= 10; ++i) {
+//            LicenseEntity license = new LicenseEntity();
+//            license.setId((long) i);
+//            license.setGeneratedKey("CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFF" +
+//                    "HX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1" +
+//                    "YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=" + i);
+//            license.setValidationKey("Validation: " + i);
+//            this.licenseRepository.save(license);
+//        }
+//    }
+//
+//    @After
+//    public void deleteDatabase() {
+//        this.licenseRepository.deleteAll();
+//    }
+//    @Test
+//    public void findByGeneratedKey_ExpectALicenseDto(){
+//        LicenseEntity foundLicense = licenseRepository.findByGeneratedKey("CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFF" +
+//                "HX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1" +
+//                "YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=1");
+//
+//        assertEquals(foundLicense.getGeneratedKey(), "CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFF" +
+//                "HX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1" +
+//                "YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=1");
+//    }
+//    @Test
+//    public void testFindByValidationKey() {
+//
+//        LicenseEntity foundLicense = licenseRepository.findByValidationKey("sdfghfds");
+//
+//        assertThat(foundLicense.getValidationKey(), is(equalTo("sdfghfds")));
+//    }
+//
+////    @Test
+////    public void testFindSpecificLicenseById() {
+////
+////        LicenseEntity foundLicense = entityManager.find(LicenseEntity.class, new Long("2"));
+////
+////        assertThat(foundLicense.getValidationKey(), is(equalTo("sdfghfds")));
+////    }
+//
+//
+//}
