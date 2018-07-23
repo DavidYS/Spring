@@ -32,7 +32,6 @@ public class LicenseServiceImpl implements LicenseService{
         int ok=0;
 
         for(LicenseEntity e : entities){
-            System.out.println();
             System.out.println(e.getGeneratedKey());
             if(e.getGeneratedKey().equals(json)){
                 licenseRepository.delete(e);
@@ -109,7 +108,7 @@ public class LicenseServiceImpl implements LicenseService{
         if(nr >= 1){
             System.out.println("Sunt mai multe");
         }
-        
+
         if(nr == 0){
             licenseRepository.save(licenseEntity);
         }
