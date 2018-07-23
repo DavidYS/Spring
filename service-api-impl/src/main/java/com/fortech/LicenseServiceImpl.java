@@ -1,14 +1,14 @@
 package com.fortech;
 
 import com.fortech.dto.LicenseDto;
-import com.fortech.entity.GeneratedKey;
-import com.fortech.entity.ValidationKey;
+import com.fortech.keys.GeneratedKey;
+import com.fortech.keys.ValidationKey;
 import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class LicenseServiceImpl implements LicenseService{
 
     @Autowired
-    LicenseRepository licenseRepository;
+    private LicenseRepository licenseRepository;
 
     public List<LicenseDto> readAllLicenseDTO(){
         return licenseRepository.findAll()
@@ -25,29 +25,21 @@ public class LicenseServiceImpl implements LicenseService{
                 .collect(Collectors.toList());
     }
 
-    public String deleteLicenseDTO(String json) {
+    public ResponseEntity<String> deleteLicenseDTO(String json) {
 
         List<LicenseEntity> entities = licenseRepository.findAll();
-
-        int ok=0;
 
         for(LicenseEntity e : entities){
             System.out.println(e.getGeneratedKey());
             if(e.getGeneratedKey().equals(json)){
                 licenseRepository.delete(e);
-                ok=1;
+                return new ResponseEntity<>("Licența a fost ștearsă.", HttpStatus.OK);
             }
         }
-
-        if(ok==1){
-            return "Licența a fost ștearsă.";
-        } else {
-            return "Licența nu a fost găsită.";
-        }
-
+        return new ResponseEntity<>("Licența nu a fost găsită.", HttpStatus.NOT_FOUND);
     }
 
-    public LicenseDto findLicenseDto(String generatedKey){
+    public ResponseEntity<LicenseDto> findLicenseDto(String generatedKey){
 
         List<LicenseEntity> entities = licenseRepository.findAll();
         int nr = 0;
@@ -57,22 +49,17 @@ public class LicenseServiceImpl implements LicenseService{
             }
         }
         if(nr > 1){
-            System.out.println("Sunt mai multe");
-            return null;
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         LicenseEntity licenseEntity = licenseRepository.findByGeneratedKey(generatedKey);
 
         if(licenseEntity == null){
             System.out.println("License : " + generatedKey + " not found.");
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        LicenseDto licenseDto = licenseEntity.toDto();
-
-        return licenseDto;
+        return new ResponseEntity<>(licenseEntity.toDto(), HttpStatus.OK);
     }
-
 
     @Override
     public LicenseDto generare(String jsonString)
@@ -90,7 +77,7 @@ public class LicenseServiceImpl implements LicenseService{
     }
 
     @Override
-    public void saveLicense(LicenseDto licenseDto) {
+    public ResponseEntity saveLicense(LicenseDto licenseDto) {
         
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity = licenseDto.toEntity();
@@ -99,19 +86,13 @@ public class LicenseServiceImpl implements LicenseService{
 
         List<LicenseEntity> entities = licenseRepository.findAll();
         
-        int nr = 0;
+
         for(LicenseEntity e : entities){
             if(e.getGeneratedKey().equals(licenseEntity.getGeneratedKey())){
-                nr++;
+                return new ResponseEntity<>("License has already been used!", HttpStatus.ALREADY_REPORTED);
             }
         }
-        if(nr >= 1){
-            System.out.println("Sunt mai multe");
-        }
-
-        if(nr == 0){
-            licenseRepository.save(licenseEntity);
-        }
+        return new ResponseEntity<>(licenseRepository.save(licenseEntity), HttpStatus.OK);
     }
 
 }

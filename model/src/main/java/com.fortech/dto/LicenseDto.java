@@ -6,18 +6,12 @@ public class LicenseDto {
     private String validationKey;
     private String generatedKey;
 
-    public LicenseDto() {
-
-    }
-
-
     public LicenseEntity toEntity() {
         LicenseEntity entity = new LicenseEntity();
         entity.setValidationKey(this.validationKey);
         entity.setGeneratedKey(this.generatedKey);
         return entity;
     }
-
 
     public void setValidationKey(String validationKey) {
         this.validationKey = validationKey;
