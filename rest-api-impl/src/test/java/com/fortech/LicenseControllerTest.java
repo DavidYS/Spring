@@ -15,8 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 
@@ -36,12 +35,12 @@ public class LicenseControllerTest {
     private String testKey = "44";
 
     @Before
-    public void setup(){
+    public void setup() {
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void readAllLicenses_shouldReturnAList(){
+    public void readAllLicenses_shouldReturnAList() {
 
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity.setGeneratedKey(generatedKey);
@@ -58,12 +57,11 @@ public class LicenseControllerTest {
     }
 
     @Test
-    public void deleteByGeneratedKey_ShouldReturnAConfirmationString(){
+    public void deleteByGeneratedKey_ShouldReturnAConfirmationString() {
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
 
-        List<LicenseDto> licenseEntities = Collections.singletonList(licenseEntity.toDto());
         licenseServiceMock.deleteLicenseDTO(generatedKey);
 
         ResponseEntity result = licenseControllerImpl.deleteByGeneratedKey(generatedKey);
@@ -71,65 +69,53 @@ public class LicenseControllerTest {
     }
 
     @Test
-    public void deleteByGeneratedKey_ShouldReturnANotFoundStatus(){
+    public void deleteByGeneratedKey_ShouldReturnANotFoundStatus() {
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
 
-        List<LicenseDto> licenseEntities = Collections.singletonList(licenseEntity.toDto());
         licenseServiceMock.deleteLicenseDTO(testKey);
 
         ResponseEntity result = licenseControllerImpl.deleteByGeneratedKey(testKey);
-        assertTrue(result.getStatusCode() == HttpStatus.NOT_FOUND);
+        assertSame(result.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
 
-
     @Test
-    public void readOne_ShouldReturnALicenseDto(){
+    public void readOne_ShouldReturnALicenseDto() {
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
 
         licenseServiceMock.findLicenseDto(generatedKey);
 
-        ResponseEntity<String> result = licenseControllerImpl.readOne(generatedKey);
-        assertTrue(result.getStatusCode() == HttpStatus.OK);
+        ResponseEntity result = licenseControllerImpl.readOne(generatedKey);
+        assertSame(result.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
-    public void readOne_ShouldReturnANotFoundStatus(){
+    public void readOne_ShouldReturnANotFoundStatus() {
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity.setGeneratedKey(generatedKey);
         licenseEntity.setValidationKey(validationKey);
 
         licenseServiceMock.findLicenseDto(testKey);
 
-        ResponseEntity<String> result = licenseControllerImpl.readOne(testKey);
-        assertTrue(result.getStatusCode() != HttpStatus.OK);
+        ResponseEntity result = licenseControllerImpl.readOne(testKey);
+        assertNotSame(result.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
-    public void generateLicense_ShouldReturnAnEncryptedString(){
-        LicenseDto licenseDto = new LicenseDto();
-        licenseDto = licenseServiceMock.generare(generatedKey);
-
-        when(licenseServiceMock.generare(generatedKey)).thenReturn(licenseDto);
-
-        ResponseEntity<LicenseDto> result = licenseControllerImpl.readOne(generatedKey);
-        assertTrue(result.getStatusCode() == HttpStatus.OK);
+    public void generateLicense_ShouldReturnAnEncryptedString() {
+        ResponseEntity result = licenseControllerImpl.readOne(generatedKey);
+        assertSame(result.getStatusCode(), HttpStatus.OK);
     }
 
 
     @Test
-    public void generateLicense_ShouldReturnABadRequestResponse(){
-        LicenseDto licenseDto = new LicenseDto();
-        licenseDto = licenseServiceMock.generare(testKey);
-
-        when(licenseServiceMock.generare(testKey)).thenReturn(licenseDto);
-
-        ResponseEntity<LicenseDto> result = licenseControllerImpl.readOne(testKey);
-        assertTrue(result.getStatusCode() == HttpStatus.NOT_FOUND);
+    public void generateLicense_ShouldReturnABadRequestResponse() {
+        ResponseEntity result = licenseControllerImpl.readOne(testKey);
+        assertSame(result.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
 

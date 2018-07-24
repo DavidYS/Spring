@@ -61,9 +61,9 @@ public class LicenseControllerImpl implements LicenseController {
             generatedKey1.generateFromString(jsonDecoded);
             String json1 = generatedKey1.toString();
             return new ResponseEntity<>(licenseService.findLicenseDto(json1), HttpStatus.OK);
-        }else {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
@@ -75,7 +75,7 @@ public class LicenseControllerImpl implements LicenseController {
             licenseService.saveLicense(licenseDto);
             return new ResponseEntity<>(Cipher.encrypt(licenseDto.getValidationKey()), HttpStatus.OK);
         }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 }
