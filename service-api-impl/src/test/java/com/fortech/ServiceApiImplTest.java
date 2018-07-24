@@ -17,10 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
@@ -92,7 +93,7 @@ public class ServiceApiImplTest {
         when(licenseRepositoryMock.findByGeneratedKey(generatedKey)).thenReturn(licenseEntity);
 
         ResponseEntity result = licenseServiceImpl.findLicenseDto(generatedKey);
-        assertTrue(result.getStatusCode()==HttpStatus.OK);
+        assertSame(result.getStatusCode(), HttpStatus.OK);
     }
 
 
@@ -107,7 +108,7 @@ public class ServiceApiImplTest {
         when(licenseRepositoryMock.findByGeneratedKey(generatedKey + "12515")).thenReturn(licenseEntity);
 
         ResponseEntity result = licenseServiceImpl.findLicenseDto(generatedKey);
-        assertTrue(result.getStatusCode()==HttpStatus.NOT_FOUND);
+        assertSame(result.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
 
@@ -156,7 +157,8 @@ public class ServiceApiImplTest {
 
         licenseServiceImpl.saveLicense(licenseDto);
 
-        Mockito.verify(licenseRepositoryMock, times(1)).save(argThat(license -> license.getValidationKey().equals
+        Mockito.verify(licenseRepositoryMock,
+                times(1)).save(argThat(license -> license.getValidationKey().equals
                 (validationKeyDto) && license.getGeneratedKey().equals(generatedKeyTest)));
     }
 

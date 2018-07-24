@@ -78,14 +78,14 @@ public class LicenseServiceImpl implements LicenseService{
 
     @Override
     public ResponseEntity saveLicense(LicenseDto licenseDto) {
-        
+
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity = licenseDto.toEntity();
 
 
 
         List<LicenseEntity> entities = licenseRepository.findAll();
-        
+
 
         for(LicenseEntity e : entities){
             if(e.getGeneratedKey().equals(licenseEntity.getGeneratedKey())){
