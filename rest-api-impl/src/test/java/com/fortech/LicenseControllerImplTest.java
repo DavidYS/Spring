@@ -5,7 +5,6 @@ import com.fortech.entity.LicenseEntity;
 import com.fortech.repository.LicenseRepository;
 import org.hamcrest.Matchers;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(
@@ -32,20 +32,9 @@ public class LicenseControllerImplTest {
     @Autowired
     protected WebApplicationContext web;
 
-    @Before
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
-
-        for (int i = 1; i <= 10; ++i) {
-            LicenseEntity license = new LicenseEntity();
-            license.setId((long) i);
-            license.setGeneratedKey("CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFF" +
-                    "HX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1" +
-                    "YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=" + i);
-            license.setValidationKey("Validation: " + i);
-            this.licenseRepository.save(license);
-        }
-    }
+    private String generatedKey = "CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFF" +
+            "HX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1" +
+            "YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=";
 
     @After
     public void deleteDatabase() {
@@ -54,87 +43,124 @@ public class LicenseControllerImplTest {
 
     @Test
     public void readAllLicenses() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
+
+        LicenseEntity licenseOne = new LicenseEntity();
+        licenseOne.setGeneratedKey(generatedKey);
+        licenseOne.setValidationKey("validation");
+        licenseRepository.save(licenseOne);
+
+        LicenseEntity licenseTwo = new LicenseEntity();
+        licenseTwo.setGeneratedKey(generatedKey + "1");
+        licenseTwo.setValidationKey("validation2");
+        licenseRepository.save(licenseTwo);
         this.mockMvc.perform(MockMvcRequestBuilders.get("/license/readAll"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].*", hasSize(2)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(10)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)));
     }
 
     @Test
-    public void deleteOneByKeyIfCorrectKey() throws Exception {
-        this.mockMvc.perform((MockMvcRequestBuilders.delete(("/license/delete/CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHABN" +
-                "HX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PWlB" +
-                "KHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1l" +
-                "HMAMEAEMHRx4=1"))))
+    public void deleteKeyIfIncorrect() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
+
+        LicenseEntity licenseOne = new LicenseEntity();
+        licenseOne.setGeneratedKey(generatedKey);
+        licenseOne.setValidationKey("validation");
+        licenseRepository.save(licenseOne);
+
+        LicenseEntity licenseTwo = new LicenseEntity();
+        licenseTwo.setGeneratedKey(generatedKey + "1");
+        licenseTwo.setValidationKey("validation2");
+        licenseRepository.save(licenseTwo);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/delete/" + "Incorrect" + generatedKey))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+
+    @Test
+    public void readOneIfKeyCorrect() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
+
+        LicenseEntity licenseOne = new LicenseEntity();
+        licenseOne.setGeneratedKey(generatedKey);
+        licenseOne.setValidationKey("validation");
+        licenseRepository.save(licenseOne);
+
+        LicenseEntity licenseTwo = new LicenseEntity();
+        licenseTwo.setGeneratedKey(generatedKey + "1");
+        licenseTwo.setValidationKey("validation2");
+        licenseRepository.save(licenseTwo);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/" + generatedKey))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Licența a fost ștearsă."));
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/readAll"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].*", hasSize(2)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(9)));
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/CE0FCl4HKwIfAFYXSRIKAA0OABABARdf" +
-                "DRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4" +
-                "CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh" +
-                "5EBgYbS1lHMAMEAEMHRx4=1"))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    @Test
+    public void readOneIfKeyIncorrect() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
+
+        LicenseEntity licenseOne = new LicenseEntity();
+        licenseOne.setGeneratedKey(generatedKey);
+        licenseOne.setValidationKey("validation");
+        licenseRepository.save(licenseOne);
+
+        LicenseEntity licenseTwo = new LicenseEntity();
+        licenseTwo.setGeneratedKey(generatedKey + "1");
+        licenseTwo.setValidationKey("validation2");
+        licenseRepository.save(licenseTwo);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/" + "Incorrect" + generatedKey))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+
+    }
+
+    @Test
+    public void generateLicenseIfKeyCorrect() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
+
+        LicenseEntity licenseOne = new LicenseEntity();
+        licenseOne.setGeneratedKey(generatedKey);
+        licenseOne.setValidationKey("validation");
+        licenseRepository.save(licenseOne);
+
+        LicenseEntity licenseTwo = new LicenseEntity();
+        licenseTwo.setGeneratedKey(generatedKey + "1");
+        licenseTwo.setValidationKey("validation2");
+        licenseRepository.save(licenseTwo);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/sendjson1/" + generatedKey))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    public void deleteOneByKeyIfNotFound() throws Exception {
-        this.mockMvc.perform((MockMvcRequestBuilders.delete(("/license/delete/CE0FCl4HKwIfAFYXSRIKAA0OABABARdfDRsHAB" +
-                "NHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA4CR04PW" +
-                "lBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYb" +
-                "S1lHMAMEAEMHRx4"))))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Licența nu a fost găsită."));
         this.mockMvc.perform(MockMvcRequestBuilders.get("/license/readAll"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].*", hasSize(2)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(10)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(3)));
+
     }
 
     @Test
-    public void readOne() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/CE0FCl4HKwIfAFYXSRIKAA0OABABAR" +
-                "dfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4H" +
-                "BA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1" +
-                "VNFh5EBgYbS1lHMAMEAEMHRx4=1"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.generatedKey", is("CE0FCl4HKwIfAFYXSRIKA" +
-                        "A0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAd" +
-                        "TlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAs" +
-                        "MEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.*", hasSize(2)));
-    }
+    public void generateLicenseIfKeyIncorrect() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.web).build();
 
-    @Test
-    public void generateLicense() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/sendjson1/CE0FCl4HKwIfAFYXSRIKAA0OABABAR" +
-                "dfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HB" +
-                "A4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VN" +
-                "Fh5EBgYbS1lHMAMEAEMHRx4=1"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        LicenseEntity licenseOne = new LicenseEntity();
+        licenseOne.setGeneratedKey(generatedKey);
+        licenseOne.setValidationKey("validation");
+        licenseRepository.save(licenseOne);
+
+        LicenseEntity licenseTwo = new LicenseEntity();
+        licenseTwo.setGeneratedKey(generatedKey + "1");
+        licenseTwo.setValidationKey("validation2");
+        licenseRepository.save(licenseTwo);
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/sendjson1/" + "Incorrect" + generatedKey))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
         this.mockMvc.perform(MockMvcRequestBuilders.get("/license/readAll"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].*", hasSize(2)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(11)));
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/license/findone/CE0FCl4HKwIfAFYXSRIKAA0OABABARd" +
-                "fDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEAdTlouS09HBwYAAF4HBA" +
-                "4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLAsMEUhRX0FDUlkdXEhLHV5fD1VNF" +
-                "h5EBgYbS1lHMAMEAEMHRx4=1"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.generatedKey", is("CE0FCl4HKwIfAFYXSRIKA" +
-                        "A0OABABARdfDRsHABNHX00EFWwXAREXFgcPUUdIFF1IHE9XW0AcVUZeXFFHX00EFWASBkFIR0UVRlVKAFhVAD0rWEA" +
-                        "dTlouS09HBwYAAF4HBA4CR04PWlBKHFdUG01XQkAUUUpDSxAREh0ZOkkSEQZQX1YcXEhJGkJUHUhXV14PBQEBABANLA" +
-                        "sMEUhRX0FDUlkdXEhLHV5fD1VNFh5EBgYbS1lHMAMEAEMHRx4=1")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.*", hasSize(2)));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(2)));
     }
 
 }
