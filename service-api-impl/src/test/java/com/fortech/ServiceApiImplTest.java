@@ -112,7 +112,7 @@ public class ServiceApiImplTest {
     }
 
 
-    @Test
+    /*@Test
     public void generare_shouldReturnALicenseDTO() {
         String json1 =
                 "{" + "\"" + "hostname" + "\"" + ":" + "\"" + "ws-bh-internship" + "\"" + "," +
@@ -176,7 +176,7 @@ public class ServiceApiImplTest {
         licenseServiceImpl.deleteLicenseDTO(generatedKeyTest);
 
         verify(licenseRepositoryMock).delete(licenseRepositoryMock.findByGeneratedKey(generatedKeyTest));
-    }
+    }*/
 
     @Test
     public void deleteOneLicense_testOk() {

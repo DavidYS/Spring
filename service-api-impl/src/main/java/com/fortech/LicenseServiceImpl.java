@@ -62,12 +62,12 @@ public class LicenseServiceImpl implements LicenseService{
     }
 
     @Override
-    public LicenseDto generare(String jsonString)
+    public LicenseDto generare(String jsonString, Integer months)
     {
         GeneratedKey generatedKey = new GeneratedKey();
         ValidationKey validationKey = new ValidationKey();
         generatedKey.generateFromString(jsonString);
-        validationKey.generate(generatedKey);
+        validationKey.generate(generatedKey, months);
 
         LicenseDto licenseDto = new LicenseDto();
         licenseDto.setGeneratedKey(generatedKey.toString());
@@ -81,7 +81,6 @@ public class LicenseServiceImpl implements LicenseService{
 
         LicenseEntity licenseEntity = new LicenseEntity();
         licenseEntity = licenseDto.toEntity();
-
 
 
         List<LicenseEntity> entities = licenseRepository.findAll();

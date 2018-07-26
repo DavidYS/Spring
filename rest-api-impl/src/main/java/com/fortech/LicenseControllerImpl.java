@@ -70,11 +70,11 @@ public class LicenseControllerImpl implements LicenseController {
     }
 
     @Override
-    public ResponseEntity<BigData> generateLicense(@PathVariable String jsonString) {
+    public ResponseEntity<BigData> generateLicense(@PathVariable String jsonString,@PathVariable Integer months) {
         LicenseDto licenseDto = new LicenseDto();
         String jsonDecoded = Cipher.decrypt(jsonString);
         if (isJSONValid(jsonDecoded)) {
-            licenseDto = licenseService.generare(jsonDecoded);
+            licenseDto = licenseService.generare(jsonDecoded,months);
             ResponseEntity<LicenseDto> responseEntity = licenseService.saveLicense(licenseDto);
             if(responseEntity.getStatusCode()==HttpStatus.OK) {
                 System.out.println(licenseDto.getValidationKey());

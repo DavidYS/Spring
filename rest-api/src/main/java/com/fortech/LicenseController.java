@@ -20,7 +20,7 @@ public interface LicenseController {
     @GetMapping("/findone/{generatedkey}")
     ResponseEntity readOne(@PathVariable("generatedkey") String generatedKey);
 
-    @GetMapping("/sendjson1/{jsonString}")
-    ResponseEntity generateLicense(@PathVariable String jsonString);
+    @GetMapping("/sendjson1/{jsonString}/{months}")
+    ResponseEntity generateLicense(@PathVariable String jsonString,@PathVariable Integer months);
 
 }

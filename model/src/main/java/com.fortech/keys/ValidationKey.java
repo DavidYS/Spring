@@ -73,12 +73,13 @@ public class ValidationKey {
         this.client = client;
     }
 
-    public void generate(GeneratedKey generatedKey) {
+    public void generate(GeneratedKey generatedKey, Integer months) {
         if (generatedKey.notNull()) {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             Calendar cal = Calendar.getInstance();
             Date date_start = cal.getTime();
-            cal.add(Calendar.YEAR, 1);
+            cal.add(Calendar.MONTH,months);
+            //cal.add(Calendar.YEAR, 1);
             Date date_finish = cal.getTime();
             this.setHostName(generatedKey.getHostName());
             this.setIpAddress(generatedKey.getIpAddress());

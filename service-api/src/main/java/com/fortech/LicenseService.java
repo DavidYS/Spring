@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface LicenseService {
 
-    LicenseDto generare(String jsonString);
+    LicenseDto generare(String jsonString,Integer months);
 
     ResponseEntity saveLicense(LicenseDto licenseDto);
 
