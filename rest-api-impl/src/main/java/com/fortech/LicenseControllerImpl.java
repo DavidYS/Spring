@@ -1,8 +1,11 @@
 package com.fortech;
 
+import com.fortech.dto.BigData;
+import com.fortech.dto.ClientInfo;
 import com.fortech.dto.LicenseDto;
 import com.fortech.encrypt.Cipher;
 import com.fortech.keys.GeneratedKey;
+import com.fortech.keys.ValidationKey;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,13 +70,39 @@ public class LicenseControllerImpl implements LicenseController {
     }
 
     @Override
-    public ResponseEntity<String> generateLicense(@PathVariable String jsonString) {
+    public ResponseEntity<BigData> generateLicense(@PathVariable String jsonString) {
         LicenseDto licenseDto = new LicenseDto();
         String jsonDecoded = Cipher.decrypt(jsonString);
         if (isJSONValid(jsonDecoded)) {
             licenseDto = licenseService.generare(jsonDecoded);
-            licenseService.saveLicense(licenseDto);
-            return new ResponseEntity<>(Cipher.encrypt(licenseDto.getValidationKey()), HttpStatus.OK);
+            ResponseEntity<LicenseDto> responseEntity = licenseService.saveLicense(licenseDto);
+            if(responseEntity.getStatusCode()==HttpStatus.OK) {
+                System.out.println(licenseDto.getValidationKey());
+
+
+                BigData bigData = new BigData();
+                bigData.setLicenseDto(Cipher.encrypt(licenseDto.getValidationKey()));
+                //String info = "";
+                ClientInfo clientInfo = new ClientInfo();
+                try {
+                    ValidationKey validationKey = new ValidationKey();
+                    validationKey = new Gson().fromJson(licenseDto.getValidationKey(), ValidationKey.class);
+                    /*info += "Client: " + validationKey.getClient() + " - start date: " + validationKey.getStart_date() +
+                            " - finish date: " + validationKey.getFinish_date();*/
+                    clientInfo.setClientName(validationKey.getClient());
+                    clientInfo.setStartDate(validationKey.getStart_date());
+                    clientInfo.setFinishDate(validationKey.getFinish_date());
+                } catch (Exception e) {
+                    System.out.println("ESTI BOU");
+                }
+                bigData.setInfo(clientInfo);
+                return new ResponseEntity<BigData>(bigData, HttpStatus.OK);
+            }else {
+                System.out.println("GOLLLLL");
+            }
+
+
+            //return new ResponseEntity<>(Cipher.encrypt(licenseDto.getValidationKey()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
